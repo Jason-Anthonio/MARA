@@ -4,30 +4,29 @@ Welcome to the `PID` directory for the **MARA (Modular Adaptive Robot Arm)** pro
 
 ---
 
-## 📌 Project Overview
+## Project Overview
 
 For robotic arms, precision and stability are everything. If a joint overshoots, the gripper could collide with obstacles or shake violently. To get accurate positioning without oscillations, we used an empirical **First-Order Plus Dead Time (FOPDT)** model combined with the **Chien-Hrones-Reswick (CHR)** tuning method.
 
 ---
 
-## 📂 Folder Structure
+## Folder Structure
 
-PID/motor\_position/
-
-├── csv\_datasets/
-│   ├── motor\_id\_data\_train\_001.csv      \# Step response training log (PWM, time, ticks)
-│   └── motor\_id\_data\_train\_002.csv      \# Validation dataset
-├── data\_log\_position/
-│   ├── serial\_writing\_motordata.ino     \# Arduino firmware: applies step PWM & streams encoder ticks
-│   └── serial\_reading\_datatocsv.py      \# Python script: listens over UART and saves data to CSV
-├── FOPDT\_Math.py                        \# System ID, Savitzky-Golay filtering, & CHR PID calculation
-├── rootlocus.png                        \# Root locus plot showing closed-loop stability in LHP
-├── stepresponse(before\&after).png       \# Step response comparison before vs. after CHR tuning
-└── README.md                            \# This documentation file
+    PID/motor\_position/
+    ├── csv\_datasets/
+    │   ├── motor\_id\_data\_train\_001.csv      \# Step response training log (PWM, time, ticks)
+    │   └── motor\_id\_data\_train\_002.csv      
+    ├── data\_log\_position/
+    │   ├── serial\_writing\_motordata.ino     \# Arduino firmware: applies step PWM & streams encoder ticks
+    │   └── serial\_reading\_datatocsv.py      \# Python script: listens over UART and saves data to CSV
+    ├── FOPDT\_Math.py                        \# System ID, Savitzky-Golay filtering, & CHR PID calculation
+    ├── rootlocus.png                        \# Root locus plot showing closed-loop stability in LHP
+    ├── stepresponse(before\&after).png       \# Step response comparison before vs. after CHR tuning
+    └── README.md                            
 
 ---
 
-## ⚙️ Hardware Specifications
+## Hardware Specifications
 
 * **Motor Model**: JGA25-370 DC Geared Motor with integrated Hall-effect encoder  
 * **Encoder Resolution**: 1133 Counts Per Revolution (CPR)  
@@ -37,7 +36,7 @@ PID/motor\_position/
 
 ---
 
-## 💡 Key Methods & "Why We Did It This Way"
+## Key Methods & "Why We Did It This Way"
 
 ### 1\. Velocity FOPDT Modeling (Instead of Direct Position Modeling)
 
@@ -72,7 +71,7 @@ PID/motor\_position/
 
 ---
 
-## 📊 Experimental Results
+## Experimental Results
 
 | Parameter | Value | Unit |
 | :---- | :---- | :---- |
@@ -97,7 +96,7 @@ float kd \= 0.0108;
 
 ---
 
-## 🚀 How to Replicate & Run
+## How to Replicate & Run
 
 1. **Flash Data Logger**:  
    * Open `data_log_position/serial_writing_motordata.ino` in Arduino IDE and flash to your microcontroller.  
