@@ -1,0 +1,6 @@
+local_MARA/build/
+local_MARA/install/
+local_MARA/log/
+local_MARA/MarAIenv/
+.vscode/
+local_MARA/.vscode/
