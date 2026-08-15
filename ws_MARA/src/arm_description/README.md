@@ -28,53 +28,53 @@ This package upgrades the original ROS 1 `ASSY_description` package to full **RO
 
 ## 2\. Directory Structure
 
-arm\_description/
-
-├── CMakeLists.txt
-
-├── LICENSE
-
-├── package.xml
-
-├── README.md
-
-├── config/
-
-│   └── controller.yaml
-
-├── launch/
-
-│   ├── controller.launch.py
-
-│   ├── controller.yaml
-
-│   ├── display.launch.py
-
-│   ├── gazebo.launch.py
-
-│   └── urdf.rviz
-
-├── meshes/
-
-│   ├── 2nd link.stl
-
-│   ├── 2nd\_link\_1.stl
-
-│   ├── 3rd link.stl
-
-│   ├── 3rd\_link\_1.stl
-
-│   ├── 4th link.stl
-
-│   ├── 4th\_link\_1.stl
-
-│   ├── 5th link.stl
-
-│   ├── 5th\_link\_1.stl
-
-│   └── base\_link.stl
-
-└── urdf/
+    arm\_description/
+    
+    ├── CMakeLists.txt
+    
+    ├── LICENSE
+    
+    ├── package.xml
+    
+    ├── README.md
+    
+    ├── config/
+    
+    │   └── controller.yaml
+    
+    ├── launch/
+    
+    │   ├── controller.launch.py
+    
+    │   ├── controller.yaml
+    
+    │   ├── display.launch.py
+    
+    │   ├── gazebo.launch.py
+    
+    │   └── urdf.rviz
+    
+    ├── meshes/
+    
+    │   ├── 2nd link.stl
+    
+    │   ├── 2nd\_link\_1.stl
+    
+    │   ├── 3rd link.stl
+    
+    │   ├── 3rd\_link\_1.stl
+    
+    │   ├── 4th link.stl
+    
+    │   ├── 4th\_link\_1.stl
+    
+    │   ├── 5th link.stl
+    
+    │   ├── 5th\_link\_1.stl
+    
+    │   └── base\_link.stl
+    
+    └── urdf/
 
     ├── arm.urdf.xacro
 
@@ -110,39 +110,26 @@ The MARA robotic arm features a 5-DOF articulated chain:
 
 Ensure you have ROS 2 Jazzy and the required dependencies installed:
 
-sudo apt update
-
-sudo apt install \-y \\
-
-  ros-jazzy-robot-state-publisher \\
-
-  ros-jazzy-joint-state-publisher \\
-
-  ros-jazzy-joint-state-publisher-gui \\
-
-  ros-jazzy-rviz2 \\
-
-  ros-jazzy-xacro \\
-
-  ros-jazzy-ros2-control \\
-
-  ros-jazzy-ros2-controllers \\
-
-  ros-jazzy-gz-ros2-control \\
-
-  ros-jazzy-ros-gz-sim \\
-
-  ros-jazzy-ros-gz-bridge
+    sudo apt update
+    sudo apt install \-y \\
+      ros-jazzy-robot-state-publisher \\
+      ros-jazzy-joint-state-publisher \\
+      ros-jazzy-joint-state-publisher-gui \\
+      ros-jazzy-rviz2 \\
+      ros-jazzy-xacro \\
+      ros-jazzy-ros2-control \\
+      ros-jazzy-ros2-controllers \\
+      ros-jazzy-gz-ros2-control \\
+      ros-jazzy-ros-gz-sim \\
+      ros-jazzy-ros-gz-bridge
 
 ### Build with Colcon
 
 From your ROS 2 workspace (e.g., `~/ros2_ws` or `/ws_MARA`):
 
-cd \~/ros2\_ws
-
-colcon build \--symlink-install \--packages-select arm\_description
-
-source install/setup.bash
+    cd \~/ros2\_ws
+    colcon build \--symlink-install \--packages-select arm\_description
+    source install/setup.bash
 
 ---
 
@@ -152,16 +139,18 @@ source install/setup.bash
 
 To inspect the robot model, joints, and TF frames:
 
-ros2 launch arm\_description display.launch.py
+    ros2 launch arm\_description display.launch.py
+
 
 ### B. Launch in Gazebo Simulation (Gazebo Harmonic)
 
 To spawn the arm into a Gazebo physics environment with active `ros2_control` hardware simulation:
 
-ros2 launch arm\_description gazebo.launch.py
+    ros2 launch arm\_description gazebo.launch.py
+
 
 ### C. Hardware Interface & Controller Bringup
 
 When running on real robot hardware (Raspberry Pi 5 / Workstation with serial/microcontroller interface):
 
-ros2 launch arm\_description controller.launch.py  
+    ros2 launch arm\_description controller.launch.py  
