@@ -15,23 +15,14 @@ For robotic arms, precision and stability are everything. If a joint overshoots,
 PID/motor\_position/
 
 ├── csv\_datasets/
-
 │   ├── motor\_id\_data\_train\_001.csv      \# Step response training log (PWM, time, ticks)
-
 │   └── motor\_id\_data\_train\_002.csv      \# Validation dataset
-
 ├── data\_log\_position/
-
 │   ├── serial\_writing\_motordata.ino     \# Arduino firmware: applies step PWM & streams encoder ticks
-
 │   └── serial\_reading\_datatocsv.py      \# Python script: listens over UART and saves data to CSV
-
 ├── FOPDT\_Math.py                        \# System ID, Savitzky-Golay filtering, & CHR PID calculation
-
 ├── rootlocus.png                        \# Root locus plot showing closed-loop stability in LHP
-
 ├── stepresponse(before\&after).png       \# Step response comparison before vs. after CHR tuning
-
 └── README.md                            \# This documentation file
 
 ---
@@ -116,7 +107,3 @@ float kd \= 0.0108;
    * Run `python3 FOPDT_Math.py` to smooth the data, extract $K$ and $\\tau$, print the transfer functions, and output the recommended $K\_p$ and $K\_d$ gains.  
 4. **Deploy**:  
    * Paste the output $K\_p$ and $K\_d$ values into the MARA motor controller firmware.
-
----
-
-*Developed by the MARA Control Systems Student Team (Gavin, Calvin, Jason, Meru).*  
