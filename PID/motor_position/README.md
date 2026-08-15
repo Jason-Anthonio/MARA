@@ -1,12 +1,12 @@
 # Motor Position PID Tuning & System Identification
 
-Welcome to the `PID` directory for the **MARA (Modular Adaptive Robot Arm)** project\! This folder contains all the firmware, data-logging scripts, experimental datasets, and math routines we used to model our DC motors and tune the joint position controllers.
+Welcome to the `PID` directory for the **MARA (Modular Adaptive Robot Arm)** project\. This folder contains the firmware, data-logging scripts and experimental datasets we used to model our DC motors and tune the joint position controllers.
 
 ---
 
 ## Project Overview
 
-For robotic arms, precision and stability are everything. If a joint overshoots, the gripper could collide with obstacles or shake violently. To get accurate positioning without oscillations, we used an empirical **First-Order Plus Dead Time (FOPDT)** model combined with the **Chien-Hrones-Reswick (CHR)** tuning method.
+Robotic arms require stability and precision. If a joint overshoots, the gripper could collide with obstacles or shake violently. To get accurate positioning without oscillations, we used an empirical **First-Order Plus Dead Time (FOPDT)** model combined with the **Chien-Hrones-Reswick (CHR)** tuning method.
 
 ---
 
@@ -14,60 +14,69 @@ For robotic arms, precision and stability are everything. If a joint overshoots,
 
     PID/motor\_position/
     ├── csv\_datasets/
-    │   ├── motor\_id\_data\_train\_001.csv      \# Step response training log (PWM, time, ticks)
+    │   ├── motor\_id\_data\_train\_001.csv      # Step response training log (PWM, time, ticks)
     │   └── motor\_id\_data\_train\_002.csv      
     ├── data\_log\_position/
-    │   ├── serial\_writing\_motordata.ino     \# Arduino firmware: applies step PWM & streams encoder ticks
-    │   └── serial\_reading\_datatocsv.py      \# Python script: listens over UART and saves data to CSV
-    ├── FOPDT\_Math.py                        \# System ID, Savitzky-Golay filtering, & CHR PID calculation
-    ├── rootlocus.png                        \# Root locus plot showing closed-loop stability in LHP
-    ├── stepresponse(before\&after).png       \# Step response comparison before vs. after CHR tuning
+    │   ├── serial\_writing\_motordata.ino     # Arduino firmware: applies step PWM & streams encoder ticks
+    │   └── serial\_reading\_datatocsv.py      # Python script: listens over UART and saves data to CSV
+    ├── FOPDT\_Math.py                        # System ID, Savitzky-Golay filtering, & CHR PID calculation
+    ├── rootlocus.png                        # Root locus plot showing closed-loop stability in LHP
+    ├── stepresponse(before\&after).png       # Step response comparison before vs. after CHR tuning
     └── README.md                            
 
 ---
 
 ## Hardware Specifications
 
-* **Motor Model**: JGA25-370 DC Geared Motor with integrated Hall-effect encoder  
-* **Encoder Resolution**: 1133 Counts Per Revolution (CPR)  
-* **Microcontroller**: Arduino / ESP32  
+* **Motor Model**: JGA25-370 DC Geared Motor with integrated Hall-effect encoder
+  
+* **Encoder Resolution**: 1133 Counts Per Revolution (CPR)
+  
+* **Microcontroller**: Arduino / ESP32
+  
 * **Step Input Used**: `150 Digital PWM` (\~59% duty cycle, \~3.696 rad/s).  
-  *Why 150?* It sits right in the linear operating zone, avoiding both the low-end static friction deadband and the high-end voltage saturation.
+  using 150 avoids both the low-end static friction deadband and the high-end voltage saturation.
 
 ---
 
-## Key Methods & "Why We Did It This Way"
+## Key Methods
 
 ### 1\. Velocity FOPDT Modeling (Instead of Direct Position Modeling)
 
-* **Concept**: DC motors physically behave as 1st-order velocity systems (due to rotor inertia $J$, damping $b$, resistance $R$, and back-EMF $K\_e$).  
-* **Why**: Fitting a 1st-order step curve to velocity ($\\omega(t)$) to find gain $K$ and mechanical time constant $\\tau$ is much simpler and more reliable than fitting a 2nd-order curve to raw position directly.  
-* **Math**:  
-  * **Velocity Transfer Function**: $$G\_v(s) \= \\frac{\\Omega(s)}{U(s)} \= \\frac{K}{\\tau s \+ 1} \= \\frac{0.0249}{0.02s \+ 1}$$  
-  * **Position Transfer Function** (integrating velocity by dividing by $s$): $$G\_p(s) \= \\frac{\\Theta(s)}{U(s)} \= \\frac{K}{s(\\tau s \+ 1)} \= \\frac{0.0249}{0.02s^2 \+ s}$$
+DC motors physically behave as 1st-order velocity systems (due to rotor inertia $J$, damping $b$, resistance $R$, and back-EMF $K\_e$).  
+Fitting a 1st-order step curve to velocity ($\\omega(t)$) to find gain $K$ and mechanical time constant $\\tau$ is much simpler than fitting a 2nd-order curve to raw position directly.
+  
+**Velocity Transfer Function**:
+$$G\_v(s) \= \\frac{\\Omega(s)}{U(s)} \= \\frac{K}{\\tau s \+ 1} \= \\frac{0.0249}{0.02s \+ 1}$$
+  
+**Position Transfer Function** (integrating velocity by dividing by $s$):
+$$G\_p(s) \= \\frac{\\Theta(s)}{U(s)} \= \\frac{K}{s(\\tau s \+ 1)} \= \\frac{0.0249}{0.02s^2 \+ s}$$
 
 ---
 
 ### 2\. Savitzky-Golay Filtering for Numerical Derivatives
 
-* **Concept**: To get velocity from discrete encoder position ticks, we compute the numerical derivative ($\\frac{\\Delta \\text{pos}}{\\Delta t}$).  
-* **Why it's unique**: Discrete encoder ticks create jagged, high-frequency quantization noise when differentiated. Standard low-pass or moving-average filters introduce unwanted phase lag that blurs the fast initial acceleration transient.  
-* **Solution**: We applied a **Savitzky-Golay filter** (`scipy.signal.savgol_filter`, window length 31, polynomial order 3). It fits local polynomials through the data, eliminating quantization noise while preserving the true physical acceleration slope needed to extract $\\tau$.
+To get velocity from discrete encoder position ticks, we compute the numerical derivative ($\\frac{\\Delta \\text{pos}}{\\Delta t}$).  
+
+We applied a **Savitzky-Golay filter** (`scipy.signal.savgol_filter`). It fits local polynomials through the data, eliminating noise while preserving the true physical acceleration slope needed to extract $\\tau$.
 
 ---
 
 ### 3\. Chien-Hrones-Reswick (CHR) Tuning (0% Overshoot Setpoint Tracking)
 
-* **Concept**: An analytical tuning method based on FOPDT parameters ($K$ and $\\tau$).  
-* **Why not standard Ziegler-Nichols (ZN)?**: Standard ZN aims for a \~25% overshoot with aggressive quarter-amplitude decay. For industrial/assistive robot arms, 25% overshoot causes joint slamming, gearbox wear, and collision hazards.  
-* **Solution**: We chose **CHR 0% Overshoot Tuning** to achieve a **critically damped** response. The joint moves swiftly to the target angle and stops cleanly with zero overshoot.
+An analytical tuning method based on FOPDT parameters ($K$ and $\\tau$).
+  
+**Why not standard Ziegler-Nichols (ZN)?**: Standard ZN aims for a \~25% overshoot with aggressive quarter-amplitude decay. For industrial/assistive robot arms, 25% overshoot causes joint slamming, gearbox wear, and collision hazards.
+  
+We chose **CHR 0% Overshoot Tuning** to achieve a **critically damped** response. The joint moves swiftly to the target angle and stops cleanly with zero overshoot.
 
 ---
 
 ### 4\. PD Control Architecture ($K\_i \= 0$)
 
-* **Concept**: We use a Proportional-Derivative (PD) controller rather than full PID.  
-* **Why**: The position transfer function $G\_p(s) \= \\frac{K}{s(\\tau s \+ 1)}$ already contains a natural open-loop integrator ($\\frac{1}{s}$), making the plant a **Type 1 system**. Type 1 systems inherently achieve **zero steady-state error** for step position inputs. Adding an active integrator term ($K\_i$) would introduce unnecessary phase lag and risk integrator windup/overshoot.
+$G\_p(s) \= \\frac{K}{s(\\tau s \+ 1)}$ 
+
+The position transfer function already contains a natural open-loop integrator ($\\frac{1}{s}$), making the plant a **Type 1 system**. Type 1 systems inherently achieve **zero steady-state error** for step position inputs. Adding an active integrator term ($K\_i$) would introduce unnecessary phase lag and risk integrator windup/overshoot.
 
 ---
 
@@ -90,8 +99,11 @@ float ki \= 0.0000;
 
 float kd \= 0.0108;
 
-* **Before Tuning**: P-only control showed notable steady-state error and sluggish positioning.  
-* **After CHR Tuning**: Fast rise time, critically damped arrival, and clean target lock at $360^\\circ$ (1133 ticks) with 0 steady-state error and 0% overshoot.  
+
+* **Before Tuning**: P-only control showed notable steady-state error and sluggish positioning.
+  
+* **After CHR Tuning**: Fast rise time, critically damped arrival, and clean target lock at $360^\\circ$ (1133 ticks) with 0 steady-state error and 0% overshoot.
+  
 * **Root Locus Verification**: All closed-loop poles reside safely in the Left-Half Plane (LHP), confirming robust stability.
 
 ---
