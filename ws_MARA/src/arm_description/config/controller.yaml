@@ -24,8 +24,8 @@ arm_controller:
     state_interfaces:
       - position
       - velocity
-    open_loop_control: true
-    allow_integration_in_goal_trajectories: true
+    open_loop_control: true #assumes the joints reaches the previous target perfectly. Avoids sudden abort
+    allow_integration_in_goal_trajectories: true #automatically estimates velocities & accel to each motion. you only need position and time stamps.
     gains:
       joint_1: {p: 100.0, i: 0.01, d: 10.0}
       joint_2: {p: 100.0, i: 0.01, d: 10.0}
