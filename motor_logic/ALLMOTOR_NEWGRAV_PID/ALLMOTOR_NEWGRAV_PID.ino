@@ -15,8 +15,8 @@ const float MAX_SPEED_D = 3.0;   // Pulses/sec (PPR 80) -> ~13.5 deg/sec
 // ==========================================
 const int OFFSET_DROP_BELOW = 0;      
 const int OFFSET_DROP_ABOVE = 0;      
-const int MIN_COMPENSATED_ANGLE = -15; 
-const int MAX_COMPENSATED_ANGLE = 195; 
+const int MIN_COMPENSATED_ANGLE = -15; //prone to change when using AS5600
+const int MAX_COMPENSATED_ANGLE = 195; //prone to change when using AS5600
 
 // ==========================================
 // MOTOR A: BIGMOTOR (SHOULDER JOINT)
@@ -35,7 +35,7 @@ float filtered_dedtA = 0.0;
 
 float currentSetpointA = 0.0; 
 float finalTargetA = 0.0;     
-int targetAngleA = 90; 
+int targetAngleA = 90; //prone to change since IK does not start at 90 degrees
 bool targetReachedA = true;
 
 float kpA = 12.0; 
@@ -88,7 +88,7 @@ float filtered_dedtC = 0.0;
 
 float currentSetpointC = 0.0; 
 float finalTargetC = 0.0;     
-int targetAngleC = 90; 
+int targetAngleC = 90; //prone to change since IK does not start at 90 degrees
 bool targetReachedC = true;
 
 float kpC = 0.6965; 
@@ -113,7 +113,7 @@ float filtered_dedtD = 0.0;
 
 float currentSetpointD = 0.0; 
 float finalTargetD = 0.0;     
-int targetAngleD = 90; 
+int targetAngleD = 90; //prone to change since IK does not start at 90 degrees
 bool targetReachedD = true;
 
 float kpD = 12.0; 
@@ -154,9 +154,9 @@ void setup() {
   pinMode(IN1_A, OUTPUT);
   pinMode(IN2_A, OUTPUT);
   
-  counterA = (long)(90.0 * (PPR_A / 360.0)); 
-  currentSetpointA = counterA; 
-  finalTargetA = counterA; 
+  counterA = (long)(90.0 * (PPR_A / 360.0)); //(prone to change since IK does not start at 90 degrees)
+  currentSetpointA = counterA; //the smaller target positions to reach the final target position
+  finalTargetA = counterA; //final target position
   setMotorA(0, 0);
 
   // Setup Motor B
@@ -167,7 +167,7 @@ void setup() {
   pinMode(IN1_B, OUTPUT);
   pinMode(IN2_B, OUTPUT);
   
-  counterB = 0; 
+  counterB = 0; //counter is the real encoder values read constantly
   currentSetpointB = counterB; 
   finalTargetB = counterB; 
   setMotorB(0, 0);
@@ -181,7 +181,7 @@ void setup() {
   pinMode(IN1_C, OUTPUT);
   pinMode(IN2_C, OUTPUT);
   
-  counterC = (long)(90.0 * (PPR_C / 360.0)); 
+  counterC = (long)(90.0 * (PPR_C / 360.0)); //(prone to change since IK does not start at 90 degrees)
   currentSetpointC = counterC; 
   finalTargetC = counterC; 
   setMotorC(0, 0);
@@ -194,7 +194,7 @@ void setup() {
   pinMode(IN1_D, OUTPUT);
   pinMode(IN2_D, OUTPUT);
   
-  counterD = (long)(90.0 * (PPR_D / 360.0)); 
+  counterD = (long)(90.0 * (PPR_D / 360.0)); //(prone to change since IK does not start at 90 degrees)
   currentSetpointD = counterD; 
   finalTargetD = counterD; 
   setMotorD(0, 0);
@@ -202,24 +202,25 @@ void setup() {
   Serial.println("Quad Motor PID System Ready.");
   Serial.println("Commands: A<angle>, B<angle>, C<angle>, D<angle>. Ex: A45 B180 C0 D90");
   Serial.println("WARNING: Ensure Motor A, C, and D are pointing STRAIGHT UP (90 deg) before starting!");
+  //when prone to change, the joints straight up will be 0 degrees (the range is -90 to 90)
 
   prevPidMicros = micros();
 }
 
 void loop() {
-  digitalWrite(STDBY, HIGH);
+  digitalWrite(STDBY, HIGH); //for Motor C
   readSerialTarget();
 
   unsigned long now = micros();
-  if (now - prevPidMicros < PID_SAMPLE_US) return;
+  if (now - prevPidMicros < PID_SAMPLE_US) return; //returns to top loop 
   
-  float deltaT = (now - prevPidMicros) / 1000000.0;
+  float deltaT = (now - prevPidMicros) / 1000000.0; //seconds
   prevPidMicros = now;
 
-  long posA = 0, posB = 0, posC = 0, posD = 0;
+  long posA = 0, posB = 0, posC = 0, posD = 0; //the variable used to store counter variables safely
   
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-    posA = counterA;
+    posA = counterA; 
     posB = counterB;
     posC = counterC;
     posD = counterD;
@@ -237,15 +238,15 @@ void loop() {
       float currentMaxSpeedA = MAX_SPEED_A;
 
       if (distanceToTargetA < decelerationZoneA) {
-        currentMaxSpeedA = max(0.5f, MAX_SPEED_A * (distanceToTargetA / decelerationZoneA));
+        currentMaxSpeedA = max(0.5f, MAX_SPEED_A * (distanceToTargetA / decelerationZoneA)); //range between 0.5 PPR to 3.0 (2.4 to 13.5 deg/sec)
       }
 
       float stepA = currentMaxSpeedA * deltaT; 
 
       if (distanceToTargetA <= stepA) {
-        currentSetpointA = finalTargetA; 
+        currentSetpointA = finalTargetA;  //(prone to change)
       } else if (finalTargetA > currentSetpointA) {
-        currentSetpointA += stepA; 
+        currentSetpointA += stepA;  //updates the small target position by each allowable rotation/step (prone to change)
       } else {
         currentSetpointA -= stepA; 
       }
@@ -263,34 +264,34 @@ void loop() {
       float currentAngleRad = (posA * (360.0 / PPR_A)) * (PI / 180.0);
       
       float raw_dedtA = (eA - eprevA) / deltaT;
-      float alpha = 0.15; 
-      filtered_dedtA = (alpha * raw_dedtA) + ((1.0 - alpha) * filtered_dedtA);
+      float alpha = 0.15; //prone to change depending on the outcome of AS5600 
+      filtered_dedtA = (alpha * raw_dedtA) + ((1.0 - alpha) * filtered_dedtA); //prone to change depending on the outcome of AS5600
 
       eintegralA += eA * deltaT;
-      if (eintegralA > integralLimitA) eintegralA = integralLimitA;
-      if (eintegralA < -integralLimitA) eintegralA = -integralLimitA;
+      if (eintegralA > integralLimitA) eintegralA = integralLimitA; //(prone to change)
+      if (eintegralA < -integralLimitA) eintegralA = -integralLimitA; //(prone to change)
       
       float uA_pid = kpA * eA + kdA * filtered_dedtA + kiA * eintegralA;
 
       // CONDITIONAL GRAVITY COMPENSATION
-      float kG = 30.0; 
+      float kG = 30.0;
       float uG = 0.0;
       float currentAngleDegA = posA * (360.0 / PPR_A);
       
       // True if moving up towards 90 degrees from either side
-      bool isLiftingA = (currentAngleDegA < 90.0 && currentSetpointA > posA) || 
+      bool isLiftingA = (currentAngleDegA < 90.0 && currentSetpointA > posA) || //(prone to change since IK does not start at 90 degrees)
                         (currentAngleDegA > 90.0 && currentSetpointA < posA);
       
       if (isLiftingA) { 
           uG = kG * cos(currentAngleRad); 
       }
       
-      float uA_total = uA_pid + uG;
+      float uA_total = uA_pid + uG; //check validity since normal IK can range to -90 not 0 degrees
 
       if (uA_total > PWM_LIMIT) uA_total = PWM_LIMIT;
       if (uA_total < -PWM_LIMIT) uA_total = -PWM_LIMIT;
 
-      int dirA = (uA_total > 0) ? 1 : ((uA_total < 0) ? -1 : 0);
+      int dirA = (uA_total > 0) ? 1 : ((uA_total < 0) ? -1 : 0); //check if necessary since the motors are self-locking
       setMotorA(dirA, abs((int)uA_total));
       eprevA = eA; 
     }
@@ -332,7 +333,7 @@ void loop() {
       filtered_dedtB = 0;
     } else {
       float raw_dedtB = (eB - eprevB) / deltaT;
-      float alphaB = 0.15; 
+      float alphaB = 0.15; //prone to change depending on the outcome of AS5600
       filtered_dedtB = (alphaB * raw_dedtB) + ((1.0 - alphaB) * filtered_dedtB);
       
       eintegralB += eB * deltaT;
@@ -524,7 +525,7 @@ void setMotorD(int dir, int pwmVal) {
 // ==========================================
 // ENCODER ISR ROUTINES
 // ==========================================
-void readEncoderA() {
+void readEncoderA() { //prone to change for AS5600
   static uint8_t old_state = 0;
   uint8_t current_A = digitalRead(clkPinA);
   uint8_t current_B = digitalRead(dtPinA);
@@ -543,7 +544,7 @@ void readEncoderC() {
   if (digitalRead(ENCB_C) > 0) counterC++; else counterC--;
 }
 
-void readEncoderD() {
+void readEncoderD() { //prone to change for AS5600
   static uint8_t old_state = 0;
   uint8_t current_A = digitalRead(clkPinD);
   uint8_t current_B = digitalRead(dtPinD);
@@ -554,10 +555,7 @@ void readEncoderD() {
   old_state = current_state;
 }
 
-// ==========================================
-// SERIAL PARSING (Multi-Axis Command Router)
-// ==========================================
-void readSerialTarget() {
+void readSerialTarget() { //DONE
   while (Serial.available() > 0) {
     char inChar = (char)Serial.read();
     
@@ -581,13 +579,13 @@ void readSerialTarget() {
           if (rawInputA < 0) rawInputA = 0;
           if (rawInputA > 180) rawInputA = 180;
           
-          static int lastRawInputA = 90; 
+          static int lastRawInputA = 90; //starts at 90 degrees (prone to change, since IK does not start at 90 degrees)
           static int currentOffsetA = 0; 
           
-          if (lastRawInputA == 90 && rawInputA != 90) {
+          if (lastRawInputA == 90 && rawInputA != 90) { //add the target by a value offset when starting at 90 degrees (prone to change when using AS5600)
               if (rawInputA < 90) currentOffsetA = OFFSET_DROP_BELOW;
               else currentOffsetA = OFFSET_DROP_ABOVE;
-          } else if (rawInputA != lastRawInputA) {
+          } else if (rawInputA != lastRawInputA) { //anything else besides 90 will not have offset (prone to change when using AS5600)
               currentOffsetA = 0;
           }
           lastRawInputA = rawInputA;
@@ -597,14 +595,14 @@ void readSerialTarget() {
           if (compensatedTarget > MAX_COMPENSATED_ANGLE) compensatedTarget = MAX_COMPENSATED_ANGLE;
           
           targetAngleA = compensatedTarget;
-          finalTargetA = targetAngleA * (PPR_A / 360.0);
+          finalTargetA = targetAngleA * (PPR_A / 360.0); //will be used in the main loop for target position
           targetReachedA = false;
         }
         
         // --- Parse JGA25 (B) ---
         if (bIndex != -1) {
           targetAngleB = inputString.substring(bIndex + 1).toInt();
-          finalTargetB = targetAngleB * (PPR_B / 360.0);
+          finalTargetB = targetAngleB * (PPR_B / 360.0); //will be used in the main loop for target position
           targetReachedB = false;
         }
 
@@ -615,7 +613,7 @@ void readSerialTarget() {
           if (rawInputC > 180) rawInputC = 180;
           
           targetAngleC = rawInputC;
-          finalTargetC = targetAngleC * (PPR_C / 360.0);
+          finalTargetC = targetAngleC * (PPR_C / 360.0); //will be used in the main loop for target position
           targetReachedC = false;
         }
         
@@ -629,7 +627,7 @@ void readSerialTarget() {
           static int currentOffsetD = 0; 
           
           if (lastRawInputD == 90 && rawInputD != 90) {
-              if (rawInputD < 90) currentOffsetD = OFFSET_DROP_BELOW;
+              if (rawInputD < 90) currentOffsetD = OFFSET_DROP_BELOW; //same as Bigmotor A's situation (prone to change when using AS5600)
               else currentOffsetD = OFFSET_DROP_ABOVE;
           } else if (rawInputD != lastRawInputD) {
               currentOffsetD = 0;
@@ -641,7 +639,7 @@ void readSerialTarget() {
           if (compensatedTargetD > MAX_COMPENSATED_ANGLE) compensatedTargetD = MAX_COMPENSATED_ANGLE;
           
           targetAngleD = compensatedTargetD;
-          finalTargetD = targetAngleD * (PPR_D / 360.0);
+          finalTargetD = targetAngleD * (PPR_D / 360.0); //will be used in the main loop for target position
           targetReachedD = false;
         }
       }
