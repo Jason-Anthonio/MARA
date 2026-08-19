@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <authoring_tool>Fusion URDF/XACRO Exporter</authoring_tool>
+    </contributor>
+    <created>2026-08-21T07:34:06Z</created>
+    <modified>2026-08-21T07:34:06Z</modified>
+    <unit name="meter" meter="1.0"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="Steel_-_Satin-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission><color>0 0 0 1</color></emission>
+            <ambient><color>0.0000 0.0000 0.0000 1</color></ambient>
+            <diffuse><color>0.6275 0.6275 0.6275 1</color></diffuse>
+            <reflective><color>0 0 0 1</color></reflective>
+            <transparent opaque="A_ONE"><color>1 1 1 1</color></transparent>
+            <transparency><float>1</float></transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="Steel_-_Satin" name="Steel_-_Satin">
+      <instance_effect url="#Steel_-_Satin-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="camera_holder-mesh" name="camera_holder">
+      <mesh>
+        <source id="camera_holder-mesh-positions">
+          <float_array id="camera_holder-mesh-positions-array" count="72">-0.040000 0.045000 0.603000 -0.065000 0.045000 0.603000 -0.065000 0.045000 0.628000 -0.040000 0.045000 0.628000 -0.040000 0.055000 0.603000 -0.040000 0.055000 0.628000 0.040000 0.055000 0.603000 0.040000 0.055000 0.628000 0.040000 0.045000 0.603000 0.040000 0.045000 0.628000 0.065000 0.045000 0.603000 0.065000 0.045000 0.628000 0.065000 -0.045000 0.603000 0.065000 -0.045000 0.628000 0.040000 -0.045000 0.603000 0.040000 -0.045000 0.628000 0.040000 -0.055000 0.603000 0.040000 -0.055000 0.628000 -0.040000 -0.055000 0.603000 -0.040000 -0.055000 0.628000 -0.040000 -0.045000 0.603000 -0.040000 -0.045000 0.628000 -0.065000 -0.045000 0.603000 -0.065000 -0.045000 0.628000</float_array>
+          <technique_common>
+            <accessor source="#camera_holder-mesh-positions-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="camera_holder-mesh-normals">
+          <float_array id="camera_holder-mesh-normals-array" count="216">0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 1.000000 -0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 1.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 -0.000000 -1.000000 0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 0.000000 0.000000 1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000 -0.000000 -0.000000 -1.000000</float_array>
+          <technique_common>
+            <accessor source="#camera_holder-mesh-normals-array" count="72" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="camera_holder-mesh-vertices">
+          <input semantic="POSITION" source="#camera_holder-mesh-positions"/>
+        </vertices>
+        <triangles material="Steel_-_Satin" count="44">
+          <input semantic="VERTEX" source="#camera_holder-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#camera_holder-mesh-normals" offset="1"/>
+          <p>0 0 1 1 3 2 3 2 1 1 2 3 4 4 0 5 5 6 5 6 0 5 3 7 6 8 4 9 7 10 7 10 4 9 5 11 8 12 6 13 9 14 9 14 6 13 7 15 10 16 8 17 11 18 11 18 8 17 9 19 12 20 10 21 13 22 13 22 10 21 11 23 14 24 12 25 15 26 15 26 12 25 13 27 16 28 14 29 17 30 17 30 14 29 15 31 18 32 16 33 19 34 19 34 16 33 17 35 20 36 18 37 21 38 21 38 18 37 19 39 22 40 20 41 23 42 23 42 20 41 21 43 1 44 22 45 2 46 2 46 22 45 23 47 23 48 21 49 2 50 2 50 21 49 3 51 3 51 21 49 15 52 3 51 15 52 9 53 9 53 15 52 13 54 9 53 13 54 11 55 19 56 17 57 21 49 21 49 17 57 15 52 7 58 5 59 9 53 9 53 5 59 3 51 1 60 0 61 22 62 22 62 0 61 20 63 20 63 0 61 8 64 20 63 8 64 14 65 14 65 8 64 10 66 14 65 10 66 12 67 4 68 6 69 0 61 0 61 6 69 8 64 16 70 18 71 14 65 14 65 18 71 20 63</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="camera_holder-node" name="camera_holder" type="NODE">
+        <instance_geometry url="#camera_holder-mesh">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Steel_-_Satin" target="#Steel_-_Satin"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>

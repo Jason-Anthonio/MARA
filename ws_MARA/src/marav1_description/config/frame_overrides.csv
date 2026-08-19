@@ -1,0 +1,13 @@
+link,parent_joint,joint_type,rule,original_roll_deg,original_pitch_deg,original_yaw_deg,post_roll_deg,post_pitch_deg,post_yaw_deg,role
+1st_encoder,Rigid_10,fixed,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
+2nd_encoder,Rigid_14,fixed,keep,0.000000,0.000000,-180.000000,0.000000,0.000000,-180.000000,unchanged
+2nd_link,Revolute_1,continuous,auto,0.000000,0.000000,0.000000,180.000000,0.000000,0.000000,revolute_axis_z
+3rd_link,Revolute_2,continuous,auto,0.000000,0.000000,0.000000,90.000000,0.000000,0.000000,revolute_axis_z
+4th_link,Revolute_3,continuous,auto,0.000000,0.000000,180.000000,90.000000,0.000000,0.000000,revolute_axis_z
+5th_link,Revolute_4,continuous,auto,-180.000000,0.000000,180.000000,-90.000000,0.000000,0.000000,revolute_axis_z
+base_link,,root,auto,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,root_x_forward_z_up
+camera_holder,Rigid_5,fixed,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
+gripper_motor,Rigid_15,fixed,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
+gripper_tooth_1,Slider_7,prismatic,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
+gripper_tooth_2,Slider_12,prismatic,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
+wrist_base,Rigid_13,fixed,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged

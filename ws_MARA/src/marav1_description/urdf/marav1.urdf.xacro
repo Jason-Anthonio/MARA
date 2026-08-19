@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="marav1">
+
+  <!-- Materials (shared across all assemblies) -->
+  <material name="Generic">
+    <color rgba="0.314 0.314 0.314 1.0"/>
+  </material>
+  <material name="Steel">
+    <color rgba="0.627 0.627 0.627 1.0"/>
+  </material>
+
+  <!-- Assembly includes -->
+  <xacro:include filename="$(find marav1_description)/urdf/assemblies/marav1.urdf.xacro"/>
+
+  <!-- Instantiate assemblies -->
+  <xacro:marav1 prefix=""/>
+
+</robot>

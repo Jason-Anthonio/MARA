@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<robot name="marav1">
+
+  <!-- Materials -->
+  <material name="Generic">
+    <color rgba="0.314 0.314 0.314 1.0"/>
+  </material>
+  <material name="Steel">
+    <color rgba="0.627 0.627 0.627 1.0"/>
+  </material>
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.000000 0.000000 0.059067" rpy="0 0 0"/>
+      <mass value="6.450568"/>
+      <inertia ixx="3.760489e-02" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="3.760489e-02" iyz="0.000000e+00" izz="5.094901e-02"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/base_link.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Generic"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/base_link.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="2nd_link">
+    <inertial>
+      <origin xyz="-0.000000 0.000000 0.116114" rpy="0 0 0"/>
+      <mass value="0.645342"/>
+      <inertia ixx="1.213519e-03" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="1.232369e-03" iyz="0.000000e+00" izz="1.086307e-03"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.160000" rpy="3.141593 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/2nd_link.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Generic"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.160000" rpy="3.141593 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/2nd_link.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="1st_encoder">
+    <inertial>
+      <origin xyz="0.000000 -0.064450 0.216830" rpy="0 0 0"/>
+      <mass value="0.457037"/>
+      <inertia ixx="2.812931e-04" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="4.400538e-04" iyz="1.050758e-05" izz="1.711258e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/1st_encoder.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Steel"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/1st_encoder.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="3rd_link">
+    <inertial>
+      <origin xyz="0.000000 -0.212420 0.005057" rpy="0 0 0"/>
+      <mass value="0.349739"/>
+      <inertia ixx="8.111995e-04" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="4.853991e-04" iyz="-1.570435e-04" izz="5.265127e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 -0.223000 0.050000" rpy="-1.570796 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/3rd_link.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Generic"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 -0.223000 0.050000" rpy="-1.570796 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/3rd_link.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="2nd_encoder">
+    <inertial>
+      <origin xyz="0.000000 -0.138267 0.202407" rpy="0 0 0"/>
+      <mass value="0.694601"/>
+      <inertia ixx="1.339629e-03" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="7.336782e-04" iyz="4.169385e-04" izz="9.739059e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/2nd_encoder.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Steel"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/2nd_encoder.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="4th_link">
+    <inertial>
+      <origin xyz="-0.000000 -0.358006 0.101929" rpy="0 0 0"/>
+      <mass value="0.334110"/>
+      <inertia ixx="5.375402e-04" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="4.448757e-04" iyz="7.412763e-05" izz="2.713387e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 -0.363000 0.055000" rpy="1.570796 0.000000 3.141593"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/4th_link.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Generic"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 -0.363000 0.055000" rpy="1.570796 0.000000 3.141593"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/4th_link.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wrist_base">
+    <inertial>
+      <origin xyz="0.000000 -0.099628 0.175927" rpy="0 0 0"/>
+      <mass value="0.626937"/>
+      <inertia ixx="5.202821e-04" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="3.449137e-04" iyz="2.461930e-05" izz="8.337110e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/wrist_base.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Steel"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/wrist_base.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="5th_link">
+    <inertial>
+      <origin xyz="0.000000 0.077420 0.033596" rpy="0 0 0"/>
+      <mass value="0.260482"/>
+      <inertia ixx="6.404395e-04" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="2.842973e-04" iyz="4.233056e-05" izz="5.191967e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="1.570796 0.000000 -3.141593"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/5th_link.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Generic"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="1.570796 0.000000 -3.141593"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/5th_link.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="gripper_motor">
+    <inertial>
+      <origin xyz="-0.000000 0.000000 0.570500" rpy="0 0 0"/>
+      <mass value="0.211935"/>
+      <inertia ixx="6.170393e-05" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="6.170393e-05" iyz="0.000000e+00" izz="1.655740e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/gripper_motor.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Steel"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/gripper_motor.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="camera_holder">
+    <inertial>
+      <origin xyz="0.000000 0.000000 0.615500" rpy="0 0 0"/>
+      <mass value="2.610125"/>
+      <inertia ixx="2.473445e-03" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="3.537120e-03" iyz="0.000000e+00" izz="5.738677e-03"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/camera_holder.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Steel"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/camera_holder.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="gripper_tooth_1">
+    <inertial>
+      <origin xyz="0.000000 -0.007500 0.037500" rpy="0 0 0"/>
+      <mass value="0.529875"/>
+      <inertia ixx="2.583141e-04" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="4.073414e-04" iyz="0.000000e+00" izz="1.688977e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 -0.055000 -0.628000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/gripper_tooth_1.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Steel"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 -0.055000 -0.628000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/gripper_tooth_1.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="gripper_tooth_2">
+    <inertial>
+      <origin xyz="0.000000 0.102500 0.037500" rpy="0 0 0"/>
+      <mass value="0.529875"/>
+      <inertia ixx="2.583141e-04" ixy="0.000000e+00" ixz="0.000000e+00"
+               iyy="4.073414e-04" iyz="0.000000e+00" izz="1.688977e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.055000 -0.628000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/gripper_tooth_2.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="Steel"/>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.055000 -0.628000" rpy="0.000000 0.000000 0.000000"/>
+      <geometry>
+        <mesh filename="package://marav1_description/meshes/marav1/gripper_tooth_2.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="Revolute_1" type="continuous">
+    <parent link="base_link"/>
+    <child link="2nd_link"/>
+    <origin xyz="0.000000 0.000000 0.322000" rpy="3.141593 0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit effort="100.0" velocity="1.00"/>
+  </joint>
+
+  <joint name="Rigid_10" type="fixed">
+    <parent link="2nd_link"/>
+    <child link="1st_encoder"/>
+    <origin xyz="0.000000 0.000000 0.322000" rpy="3.141593 0.000000 0.000000"/>
+  </joint>
+
+  <joint name="Revolute_2" type="continuous">
+    <parent link="2nd_link"/>
+    <child link="3rd_link"/>
+    <origin xyz="0.000000 0.005000 -0.124000" rpy="-1.570796 0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit effort="100.0" velocity="1.00"/>
+  </joint>
+
+  <joint name="Rigid_14" type="fixed">
+    <parent link="3rd_link"/>
+    <child link="2nd_encoder"/>
+    <origin xyz="-0.000000 -0.306000 0.095169" rpy="1.570796 0.000000 3.141593"/>
+  </joint>
+
+  <joint name="Revolute_3" type="continuous">
+    <parent link="3rd_link"/>
+    <child link="4th_link"/>
+    <origin xyz="0.000000 0.280000 -0.110000" rpy="0.000000 0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit effort="100.0" velocity="1.00"/>
+  </joint>
+
+  <joint name="Rigid_13" type="fixed">
+    <parent link="4th_link"/>
+    <child link="wrist_base"/>
+    <origin xyz="-0.000000 -0.446000 0.009831" rpy="-1.570796 0.000000 0.000000"/>
+  </joint>
+
+  <joint name="Revolute_4" type="continuous">
+    <parent link="4th_link"/>
+    <child link="5th_link"/>
+    <origin xyz="0.000000 -0.123000 0.160000" rpy="3.141593 0.000000 0.000000"/>
+    <axis xyz="0.000000 0.000000 1.000000"/>
+    <limit effort="100.0" velocity="1.00"/>
+  </joint>
+
+  <joint name="Rigid_15" type="fixed">
+    <parent link="5th_link"/>
+    <child link="gripper_motor"/>
+    <origin xyz="0.000000 0.603000 0.055000" rpy="1.570796 0.000000 0.000000"/>
+  </joint>
+
+  <joint name="Rigid_5" type="fixed">
+    <parent link="5th_link"/>
+    <child link="camera_holder"/>
+    <origin xyz="0.000000 0.603000 0.055000" rpy="1.570796 0.000000 0.000000"/>
+  </joint>
+
+  <joint name="Slider_7" type="prismatic">
+    <parent link="camera_holder"/>
+    <child link="gripper_tooth_1"/>
+    <origin xyz="0.000000 0.055000 0.628000" rpy="0.000000 0.000000 0.000000"/>
+    <axis xyz="0.000000 -1.000000 0.000000"/>
+    <limit lower="0.000000" upper="0.040000" effort="100.0" velocity="1.00"/>
+  </joint>
+
+  <joint name="Slider_12" type="prismatic">
+    <parent link="camera_holder"/>
+    <child link="gripper_tooth_2"/>
+    <origin xyz="0.000000 -0.150000 0.628000" rpy="0.000000 0.000000 0.000000"/>
+    <axis xyz="0.000000 1.000000 0.000000"/>
+    <limit lower="0.000000" upper="0.040000" effort="100.0" velocity="1.00"/>
+  </joint>
+
+  <!-- ROS 2 control: generated generic system -->
+  <ros2_control name="marav1_system" type="system">
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+      <param name="cmd_topic">sim/marav1_system/cmd</param>
+      <param name="state_topic">sim/marav1_system/state</param>
+    </hardware>
+
+    <joint name="Revolute_1">
+      <command_interface name="position"/>
+      <command_interface name="velocity"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="Revolute_2">
+      <command_interface name="position"/>
+      <command_interface name="velocity"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="Revolute_3">
+      <command_interface name="position"/>
+      <command_interface name="velocity"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="Revolute_4">
+      <command_interface name="position"/>
+      <command_interface name="velocity"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="Slider_12">
+      <command_interface name="position"/>
+      <command_interface name="velocity"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="Slider_7">
+      <command_interface name="position"/>
+      <command_interface name="velocity"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </ros2_control>
+
+</robot>
