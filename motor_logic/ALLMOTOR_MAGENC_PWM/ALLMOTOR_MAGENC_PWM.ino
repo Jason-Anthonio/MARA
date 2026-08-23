@@ -5,10 +5,10 @@
 // --- MOTION PROFILING (STEPPER FEEL) ---
 // ==========================================
 // Controls how fast the setpoint moves. Lower = Slower & Smoother.
-const float MAX_SPEED_A = 30.0;   // Pulses/sec (PPR 1024) -> ~10.5 deg/sec
+const float MAX_SPEED_A = 114.0;   // Pulses/sec (PPR 4096) -> ~10.01 deg/sec
 const float MAX_SPEED_B = 500.0; // Pulses/sec (PPR 17520) -> ~10.2 deg/sec
 const float MAX_SPEED_C = 500.0; // Pulses/sec (PPR 17520) -> ~10.2 deg/sec
-const float MAX_SPEED_D = 30.0;   // Pulses/sec (PPR 1024) -> ~10.5 deg/sec
+const float MAX_SPEED_D = 114.0;   // Pulses/sec (PPR 4096) -> ~10.01 deg/sec
 
 // ==========================================
 // --- MOTOR ERROR COMPENSATION CONFIG ---
@@ -24,7 +24,7 @@ const int MAX_COMPENSATED_ANGLE = 180; //changed
 const int MagPinA = A0;
 #define IN1_A 7
 #define IN2_A 6
-#define PPR_A 1024.0 
+#define PPR_A 4096.0 
 #define TOLERANCE_A 6 
 
 volatile long counterA = 0; 
@@ -37,10 +37,10 @@ float finalTargetA = 0.0;
 int targetAngleA = 0; //changed
 bool targetReachedA = true;
 
-float kpA = 0.9375;
-float kiA = 0.703125;        
-float kdA = 0.125; 
-const float integralLimitA = 82.0;
+float kpA = 0.23;
+float kiA = 0.17;        
+float kdA = 0.03;
+const float integralLimitA = 332.0;
 
 // ==========================================
 // MOTOR B: JGA25 (BASE JOINT)
@@ -101,7 +101,7 @@ const float integralLimitC = 110.0;
 const int MagPinD = A1;
 #define IN1_D 11
 #define IN2_D 12
-#define PPR_D 1024.0 
+#define PPR_D 4096.0 
 #define TOLERANCE_D 6   
 
 volatile long counterD = 0; 
@@ -114,10 +114,10 @@ float finalTargetD = 0.0;
 int targetAngleD = 0; //changed
 bool targetReachedD = true;
 
-float kpD = 0.9375;
-float kiD = 0.703125;        
-float kdD = 0.125; 
-const float integralLimitD = 82.0;
+float kpD = 0.23; 
+float kiD = 0.17;        
+float kdD = 0.03;
+const float integralLimitD = 332.0;
 
 // ==========================================
 // GLOBAL SYSTEM VARIABLES
@@ -232,11 +232,11 @@ void loop() {
     // SLEW RATE LIMITER WITH DECELERATION ZONE
     if (currentSetpointA != finalTargetA) {
       float distanceToTargetA = abs(finalTargetA - currentSetpointA);
-      float decelerationZoneA = 43.0; // Optimized for 1024 PPR (~15 degrees)
+      float decelerationZoneA = 171.0; // Optimized for 4096 PPR (~15 degrees)
       float currentMaxSpeedA = MAX_SPEED_A;
 
       if (distanceToTargetA < decelerationZoneA) {
-        currentMaxSpeedA = max(0.5f, MAX_SPEED_A * (distanceToTargetA / decelerationZoneA)); //prone to change 0.5 PPR
+        currentMaxSpeedA = max(0.5f, MAX_SPEED_A * (distanceToTargetA / decelerationZoneA)); //prone to change, if scaled the minimum should be 25.6 PPR
       }
 
       float stepA = currentMaxSpeedA * deltaT; 
@@ -262,7 +262,7 @@ void loop() {
       float currentAngleRad = (posA * (360.0 / PPR_A)) * (PI / 180.0);
       
       float raw_dedtA = (eA - eprevA) / deltaT;
-      float alpha = 0.15; //prone to change depending on the outcome of AS5600 
+      float alpha = 0.15; //prone to change (check if the PID seems to lag behind then increase the value)
       filtered_dedtA = (alpha * raw_dedtA) + ((1.0 - alpha) * filtered_dedtA);
 
       eintegralA += eA * deltaT;
@@ -271,8 +271,8 @@ void loop() {
       
       float uA_pid = kpA * eA + kdA * filtered_dedtA + kiA * eintegralA;
 
-      // CONDITIONAL GRAVITY COMPENSATION
-      float kG = 30.0; //prone to change AS5600
+      // CONDITIONAL GRAVITY COMPENSATION       check if necessary since the motors are self-locking
+      float kG = 30.0; //prone to change (you can try making the PID values 0 first and test this G value, increase if it droops)
       float uG = 0.0;
       float currentAngleDegA = posA * (360.0 / PPR_A);
       
@@ -284,12 +284,12 @@ void loop() {
           uG = kG * cos(currentAngleRad); 
       }
       
-      float uA_total = uA_pid + uG; //check validity since normal IK can range to -90 not 0 degrees
+      float uA_total = uA_pid + uG;
 
       if (uA_total > PWM_LIMIT) uA_total = PWM_LIMIT;
       if (uA_total < -PWM_LIMIT) uA_total = -PWM_LIMIT;
 
-      int dirA = (uA_total > 0) ? 1 : ((uA_total < 0) ? -1 : 0); //check if necessary since the motors are self-locking
+      int dirA = (uA_total > 0) ? 1 : ((uA_total < 0) ? -1 : 0);
       setMotorA(dirA, abs((int)uA_total));
       eprevA = eA; 
     }
@@ -307,7 +307,7 @@ void loop() {
       float currentMaxSpeedB = MAX_SPEED_B;
 
       if (distanceToTargetB < decelerationZoneB) {
-        currentMaxSpeedB = max(20.0f, MAX_SPEED_B * (distanceToTargetB / decelerationZoneB));
+        currentMaxSpeedB = max(20.0f, MAX_SPEED_B * (distanceToTargetB / decelerationZoneB)); 
       }
 
       float stepB = currentMaxSpeedB * deltaT; 
@@ -412,11 +412,11 @@ void loop() {
     // SLEW RATE LIMITER WITH DECELERATION ZONE
     if (currentSetpointD != finalTargetD) {
       float distanceToTargetD = abs(finalTargetD - currentSetpointD);
-      float decelerationZoneD = 43.0; // Optimized for 1024 PPR (~15 degrees)
+      float decelerationZoneD = 171.0; // Optimized for 4096 PPR (~15 degrees)
       float currentMaxSpeedD = MAX_SPEED_D;
 
       if (distanceToTargetD < decelerationZoneD) {
-        currentMaxSpeedD = max(0.5f, MAX_SPEED_D * (distanceToTargetD / decelerationZoneD)); //prone to change 0.5 PPR
+        currentMaxSpeedD = max(0.5f, MAX_SPEED_D * (distanceToTargetD / decelerationZoneD)); //prone to change, if scaled the minimum should be 25.6 PPR
       }
 
       float stepD = currentMaxSpeedD * deltaT; 
@@ -442,7 +442,7 @@ void loop() {
       float currentAngleRadD = (posD * (360.0 / PPR_D)) * (PI / 180.0);
 
       float raw_dedtD = (eD - eprevD) / deltaT;
-      float alphaD = 0.15;  //prone to change
+      float alphaD = 0.15;  //prone to change (check if the PID seems to lag behind then increase the value)
       filtered_dedtD = (alphaD * raw_dedtD) + ((1.0 - alphaD) * filtered_dedtD);
 
       eintegralD += eD * deltaT;
@@ -452,7 +452,7 @@ void loop() {
       float uD_pid = kpD * eD + kdD * filtered_dedtD + kiD * eintegralD;
 
       // RESTORED CONDITIONAL GRAVITY COMPENSATION
-      float kG_D = 30.0; //prone to change
+      float kG_D = 30.0; //prone to change (you can try making the PID values 0 first and test this G value, increase if it droops)
       float uG_D = 0.0;
       float currentAngleDegD = posD * (360.0 / PPR_D);
       
