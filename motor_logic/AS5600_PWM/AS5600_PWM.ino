@@ -1,23 +1,21 @@
 #include <Wire.h>
 #include <util/atomic.h>
 
-// --- Hardware Definitions ---
-const int PWM_PIN = 3;                  // Mega Interrupt Pin 1
-const int MULTIPLEXER_ADDR = 0x70;      // TCA9548A I2C address
-const int AS5600_ADDR = 0x36;           // AS5600 fixed I2C address
-const int CONF_REG_LOW = 0x08;          // Register holding the output mode bits
+//Hardware
+const int PWM_PIN = 3;                  
+const int MULTIPLEXER_ADDR = 0x70;  //check
+const int AS5600_ADDR = 0x36;           
+const int CONF_REG_LOW = 0x08;  //the configuration register
 
-// --- Volatile Interrupt Variables ---
+//Interrupt Variables
 volatile unsigned long riseTime = 0;
 volatile unsigned long highTime = 0;
-volatile unsigned long period = 1086;   // Expected default period at 920Hz
+volatile unsigned long period = 1086; //920Hz
 
-// --- Timing for Serial Print ---
+//Timing
 unsigned long prevPrintMillis = 0;
 
-// ==========================================
 // MULTIPLEXER HELPER
-// ==========================================
 void tcaSelect(uint8_t channel) {
   if (channel > 7) return;
   Wire.beginTransmission(MULTIPLEXER_ADDR);
@@ -25,29 +23,24 @@ void tcaSelect(uint8_t channel) {
   Wire.endTransmission();
 }
 
-// ==========================================
-// AS5600 CONFIGURATION (Runs once)
-// ==========================================
+// AS5600 CONFIGURATION
 void setAS5600ToPWM() {
   tcaSelect(0); // Open channel 0 for Motor A
-  
-  // 1. Read current CONF register
+
+  //modifies the AS5600 configuration register for PWM mode
   Wire.beginTransmission(AS5600_ADDR);
   Wire.write(CONF_REG_LOW); 
   Wire.endTransmission(false);
-  
-  Wire.requestFrom(AS5600_ADDR, 1);
+
+  Wire.requestFrom(AS5600_ADDR, 1); //1 byte to read
   if (Wire.available() == 0) {
     Serial.println("ERROR: AS5600 not found on I2C bus!");
-    while(1); // Halt execution if sensor is unplugged
+    while(1);
   }
   uint8_t confLow = Wire.read();
   
-  // 2. Modify Output Mode bits (Bits 5:4 -> 01 for PWM)
-  // Bitwise AND clears bits 5 and 4. Bitwise OR sets bit 4 to HIGH.
-  confLow = (confLow & 0b11001111) | 0b00010000; 
-  
-  // 3. Write it back to the sensor
+  confLow = (confLow & 0b00001111) | 0b11100000; //bits 5-4 -> 10 for PWM, bits 7-6 -> 11 for 920Hz
+
   Wire.beginTransmission(AS5600_ADDR);
   Wire.write(CONF_REG_LOW);
   Wire.write(confLow);
@@ -56,73 +49,53 @@ void setAS5600ToPWM() {
   Serial.println("SUCCESS: AS5600 configured to PWM Mode.");
 }
 
-// ==========================================
 // HARDWARE INTERRUPT ROUTINE
-// ==========================================
 void readPWM() {
   unsigned long now = micros();
   if (digitalRead(PWM_PIN) == HIGH) {
-    // The wave just went HIGH. The time since the LAST time it went HIGH is our total period.
-    period = now - riseTime; 
-    riseTime = now;
+    period = now - riseTime; // How long since the last HIGH
+    riseTime = now; // Reset the timer
   } else {
-    // The wave just went LOW. The time it spent HIGH is our pulse width.
-    highTime = now - riseTime; 
+    highTime = now - riseTime; // HIGH duration
   }
 }
 
-// ==========================================
 // MAIN SETUP
-// ==========================================
 void setup() {
   Serial.begin(115200);
   Wire.begin();
-  
-  // Configure the sensor
+
   setAS5600ToPWM();
-  
-  // Attach the interrupt to Pin 3
+
+  //setup the interrupt using a pwm interrupt pin
   pinMode(PWM_PIN, INPUT);
   attachInterrupt(digitalPinToInterrupt(PWM_PIN), readPWM, CHANGE);
   
   Serial.println("Starting PWM telemetry read...");
 }
 
-// ==========================================
 // MAIN LOOP
-// ==========================================
 void loop() {
-  // Only print 5 times a second to keep the Serial Monitor readable
-  if (millis() - prevPrintMillis >= 200) {
+  if (millis() - prevPrintMillis >= 200) { // print 5 times a second
     prevPrintMillis = millis();
     
     unsigned long safeHigh, safePeriod;
     
-    // ATOMIC_BLOCK pauses the interrupt just long enough to copy the variables safely
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
       safeHigh = highTime;
       safePeriod = period;
     }
-    
-    // Failsafe: Prevent divide-by-zero if the interrupt hasn't triggered yet
-    if (safePeriod == 0) return;
+    if (safePeriod == 0) return; //waits for the first rising edge to be detected
 
-    // --- The Datasheet Math ---
-    // Total clocks in a period = 4127. 
-    // We multiply before dividing to avoid floating point math slow-downs.
-    long clockCount = (safeHigh * 4127) / safePeriod;
+    long clockCount = (safeHigh * 4351) / safePeriod; //4351 ticks for full wave (divide high and period for the current amount of ticks)
     
-    // 0 degrees is exactly 16 clocks. 
-    int rawAngle = clockCount - 16;
-    
-    // Clamp values in case of microscopic timing jitter
+    int rawAngle = clockCount - 128; //0 degrees starts at 128 ticks
+
     if (rawAngle < 0) rawAngle = 0;
     if (rawAngle > 4095) rawAngle = 4095;
-    
-    // Convert to human-readable degrees for testing
+
     float degrees = rawAngle * (360.0 / 4096.0);
-    
-    // Print diagnostics
+
     Serial.print("High(us): ");
     Serial.print(safeHigh);
     Serial.print("\t Period(us): ");
