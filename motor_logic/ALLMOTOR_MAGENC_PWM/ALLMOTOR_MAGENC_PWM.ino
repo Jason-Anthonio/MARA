@@ -1,5 +1,27 @@
+// Motors A (shoulder) and D (elbow) now read ABSOLUTE position from an
+// AS5600 magnetic encoder via its PWM output
+//
+//   2. CHECK DIRECTION.
+//      AS5600_INVERT_A / _D default to false. If a joint moves the wrong
+//      way relative to the angle you commanded, flip the matching one to
+//      true and re-test.
+//
+//   3. I2C MUX FOR THE TWO AS5600 CHIPS.
+//      Both AS5600 chips share the same fixed I2C address (0x36), so a
+//      TCA9548A I2C multiplexer (a chip that lets one bus reach several
+//      downstream devices, each on its own selectable channel) sits
+//      between the Mega and both sensors. configureAS5600ForPWM() selects
+//      the right mux channel before each chip's one-time config write.
+//      Wiring assumed below: mux upstream SDA/SCL -> Mega SDA/SCL, Motor
+//      A's AS5600 on mux channel 0, Motor D's AS5600 on mux channel 1, mux
+//      address 0x70 (default with A0-A2 tied low). Adjust the #defines if
+//      your wiring differs. The mux is only used during setup() -- once
+//      each chip is in PWM mode, position reads happen over plain GPIO
+//      (AS5600_PWM_PIN_A/D), no further I2C/mux traffic needed.
+
+#include <Wire.h>
 #include <util/atomic.h>
-#include <math.h> 
+#include <math.h>
 
 // ==========================================
 // --- MOTION PROFILING (STEPPER FEEL) ---
@@ -15,26 +37,47 @@ const float MAX_SPEED_D = 114.0;   // Pulses/sec (PPR 4096) -> ~10.01 deg/sec
 // ==========================================
 const int OFFSET_DROP_BELOW = 0;      
 const int OFFSET_DROP_ABOVE = 0;      
-const int MIN_COMPENSATED_ANGLE = 0; //changed
-const int MAX_COMPENSATED_ANGLE = 180; //changed
+const int MIN_COMPENSATED_ANGLE = 0;
+const int MAX_COMPENSATED_ANGLE = 180;
 
 // ==========================================
-// MOTOR A: BIGMOTOR (SHOULDER JOINT)
+// --- AS5600 SHARED CONFIG (MOTOR A & D) ---
 // ==========================================
-const int MagPinA = A0;
+#define AS5600_ADDR 0x36   // fixed I2C address, same for every stock AS5600
+
+// TCA9548A I2C mux -- lets the shared-address AS5600 chips be configured
+// individually. Only used during setup(); position reads afterward are
+// plain GPIO PWM decode, no mux involved.
+#define TCA9548A_ADDR 0x70        // default mux address (A0-A2 tied low)
+#define AS5600_MUX_CHANNEL_A 0    // mux channel Motor A's AS5600 is wired to
+#define AS5600_MUX_CHANNEL_D 1    // mux channel Motor D's AS5600 is wired to
+
+// ==========================================
+// MOTOR A: BIGMOTOR (SHOULDER JOINT) — AS5600 absolute magnetic encoder
+// ==========================================
 #define IN1_A 7
 #define IN2_A 6
-#define PPR_A 4096.0 
+#define PPR_A 4096.0   // AS5600 native resolution: 4096 ticks per revolution
 #define TOLERANCE_A 6 
 
-volatile long counterA = 0; 
+// AS5600 PWM decode (replaces the old two-pin quadrature readEncoderA)
+#define AS5600_PWM_PIN_A 3   // interrupt-capable pin (Mega: 2,3,18,19,20,21)
+volatile unsigned long riseTimeA = 0;
+volatile unsigned long highTimeA = 0;
+volatile unsigned long totalPeriodA = 0;
+long lastGoodPosA = 0;  // holds the last valid reading if a PWM cycle is missed
+
+// Calibration -- see notes at top of file.
+int AS5600_ZERO_OFFSET_A = 128;   // 0 deg per datasheet; not being recalibrated
+bool AS5600_INVERT_A = false;     // verify direction on the bench
+
 float eprevA = 0.0;
 float eintegralA = 0.0;
 float filtered_dedtA = 0.0; 
 
 float currentSetpointA = 0.0; 
 float finalTargetA = 0.0;     
-int targetAngleA = 0; //changed
+int targetAngleA = 0;
 bool targetReachedA = true;
 
 float kpA = 0.23;
@@ -87,7 +130,7 @@ float filtered_dedtC = 0.0;
 
 float currentSetpointC = 0.0; 
 float finalTargetC = 0.0;     
-int targetAngleC = 0; //changed
+int targetAngleC = 0;
 bool targetReachedC = true;
 
 float kpC = 0.6965; 
@@ -96,22 +139,29 @@ float kdC = 0.0070;
 const float integralLimitC = 110.0;
 
 // ==========================================
-// MOTOR D: BIGMOTOR (ELBOW JOINT)
+// MOTOR D: BIGMOTOR (ELBOW JOINT) — AS5600 absolute magnetic encoder
 // ==========================================
-const int MagPinD = A1;
 #define IN1_D 11
 #define IN2_D 12
 #define PPR_D 4096.0 
 #define TOLERANCE_D 6   
 
-volatile long counterD = 0; 
+#define AS5600_PWM_PIN_D 19  // interrupt-capable pin (Mega: 2,3,18,19,20,21)
+volatile unsigned long riseTimeD = 0;
+volatile unsigned long highTimeD = 0;
+volatile unsigned long totalPeriodD = 0;
+long lastGoodPosD = 0;
+
+int AS5600_ZERO_OFFSET_D = 128;   // 0 deg per datasheet; not being recalibrated
+bool AS5600_INVERT_D = false;     // verify direction on the bench
+
 float eprevD = 0.0;
 float eintegralD = 0.0;
 float filtered_dedtD = 0.0; 
 
 float currentSetpointD = 0.0; 
 float finalTargetD = 0.0;     
-int targetAngleD = 0; //changed
+int targetAngleD = 0;
 bool targetReachedD = true;
 
 float kpD = 0.23; 
@@ -131,10 +181,14 @@ unsigned long prevPrintMillis = 0;
 String inputString = "";
 
 // Function Prototypes
-void readEncoderA();
+void selectMuxChannel(uint8_t channel);
+void configureAS5600ForPWM(uint8_t muxChannel);
+void catchWaveA();
+void catchWaveD();
+long readAS5600TicksA();
+long readAS5600TicksD();
 void readEncoderB();
 void readEncoderC();
-void readEncoderD();
 void setMotorA(int dir, int pwmVal);
 void setMotorB(int dir, int pwmVal);
 void setMotorC(int dir, int pwmVal);
@@ -143,18 +197,23 @@ void readSerialTarget();
 
 void setup() {
   Serial.begin(115200);
+  Wire.begin();
+  configureAS5600ForPWM(AS5600_MUX_CHANNEL_A);   // one-time PWM-mode config, Motor A's chip
+  configureAS5600ForPWM(AS5600_MUX_CHANNEL_D);   // one-time PWM-mode config, Motor D's chip
 
-  // Setup Motor A
-  pinMode(clkPinA, INPUT_PULLUP);//prone to change
-  pinMode(dtPinA, INPUT_PULLUP);//prone to change
-  attachInterrupt(digitalPinToInterrupt(clkPinA), readEncoderA, CHANGE);//prone to change
-  attachInterrupt(digitalPinToInterrupt(dtPinA), readEncoderA, CHANGE);//prone to change
+  // Setup Motor A (AS5600 absolute encoder)
+  pinMode(AS5600_PWM_PIN_A, INPUT);
+  attachInterrupt(digitalPinToInterrupt(AS5600_PWM_PIN_A), catchWaveA, CHANGE);
   pinMode(IN1_A, OUTPUT);
   pinMode(IN2_A, OUTPUT);
-  
-  counterA = (long)(0.0 * (PPR_A / 360.0)); //changed
-  currentSetpointA = counterA; //the smaller target positions to reach the final target position
-  finalTargetA = counterA; //final target position
+  delay(5); // give the sensor a moment to produce its first PWM cycle
+  {
+    long initPosA = readAS5600TicksA();
+    if (initPosA < 0) initPosA = 0; // no signal yet, will self-correct next PID tick
+    lastGoodPosA = initPosA;
+    currentSetpointA = initPosA;    // start the setpoint at the arm's real position
+    finalTargetA = initPosA;
+  }
   setMotorA(0, 0);
 
   // Setup Motor B
@@ -179,28 +238,30 @@ void setup() {
   pinMode(IN1_C, OUTPUT);
   pinMode(IN2_C, OUTPUT);
   
-  counterC = (long)(0.0 * (PPR_C / 360.0)); //changed
+  counterC = (long)(0.0 * (PPR_C / 360.0));
   currentSetpointC = counterC; 
   finalTargetC = counterC; 
   setMotorC(0, 0);
 
-  // Setup Motor D
-  pinMode(clkPinD, INPUT_PULLUP);//prone to change
-  pinMode(dtPinD, INPUT_PULLUP);//prone to change
-  attachInterrupt(digitalPinToInterrupt(clkPinD), readEncoderD, CHANGE);//prone to change
-  attachInterrupt(digitalPinToInterrupt(dtPinD), readEncoderD, CHANGE);//prone to change
+  // Setup Motor D (AS5600 absolute encoder)
+  pinMode(AS5600_PWM_PIN_D, INPUT);
+  attachInterrupt(digitalPinToInterrupt(AS5600_PWM_PIN_D), catchWaveD, CHANGE);
   pinMode(IN1_D, OUTPUT);
   pinMode(IN2_D, OUTPUT);
-  
-  counterD = (long)(0.0 * (PPR_D / 360.0)); //changed
-  currentSetpointD = counterD; 
-  finalTargetD = counterD; 
+  delay(5);
+  {
+    long initPosD = readAS5600TicksD();
+    if (initPosD < 0) initPosD = 0;
+    lastGoodPosD = initPosD;
+    currentSetpointD = initPosD;
+    finalTargetD = initPosD;
+  }
   setMotorD(0, 0);
 
   Serial.println("Quad Motor PID System Ready.");
   Serial.println("Commands: A<angle>, B<angle>, C<angle>, D<angle>. Ex: A45 B180 C0 D90");
-  Serial.println("WARNING: Ensure Motor A, C, and D are pointing STRAIGHT UP (0 deg) before starting!");
-  //changed serial output
+  Serial.println("WARNING: Ensure Motor C is pointing STRAIGHT UP (0 deg) before starting!");
+  Serial.println("NOTE: Motors A and D read their real position from the AS5600 at boot -- no manual zeroing needed once AS5600_ZERO_OFFSET_A/D are calibrated.");
 
   prevPidMicros = micros();
 }
@@ -215,13 +276,21 @@ void loop() {
   float deltaT = (now - prevPidMicros) / 1000000.0; //seconds
   prevPidMicros = now;
 
-  long posA = 0, posB = 0, posC = 0, posD = 0; //the variable used to store counter variables safely
-  
+  long posA, posB = 0, posC = 0, posD;
+
+  // Motor A/D: absolute AS5600 reading. If a fresh PWM cycle hasn't landed
+  // yet this tick, reuse the last good value instead of snapping to 0.
+  long rawA = readAS5600TicksA();
+  if (rawA >= 0) lastGoodPosA = rawA;
+  posA = lastGoodPosA;
+
+  long rawD = readAS5600TicksD();
+  if (rawD >= 0) lastGoodPosD = rawD;
+  posD = lastGoodPosD;
+
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-    posA = counterA; 
     posB = counterB;
     posC = counterC;
-    posD = counterD;
   }
 
   // =========================================================
@@ -236,7 +305,7 @@ void loop() {
       float currentMaxSpeedA = MAX_SPEED_A;
 
       if (distanceToTargetA < decelerationZoneA) {
-        currentMaxSpeedA = max(0.5f, MAX_SPEED_A * (distanceToTargetA / decelerationZoneA)); //prone to change, if scaled the minimum should be 25.6 PPR
+        currentMaxSpeedA = max(0.5f, MAX_SPEED_A * (distanceToTargetA / decelerationZoneA));
       }
 
       float stepA = currentMaxSpeedA * deltaT; 
@@ -244,7 +313,7 @@ void loop() {
       if (distanceToTargetA <= stepA) {
         currentSetpointA = finalTargetA;
       } else if (finalTargetA > currentSetpointA) {
-        currentSetpointA += stepA;  //updates the small target position by each allowable rotation/step
+        currentSetpointA += stepA;
       } else {
         currentSetpointA -= stepA; 
       }
@@ -262,7 +331,7 @@ void loop() {
       float currentAngleRad = (posA * (360.0 / PPR_A)) * (PI / 180.0);
       
       float raw_dedtA = (eA - eprevA) / deltaT;
-      float alpha = 0.15; //prone to change (check if the PID seems to lag behind then increase the value)
+      float alpha = 0.15;
       filtered_dedtA = (alpha * raw_dedtA) + ((1.0 - alpha) * filtered_dedtA);
 
       eintegralA += eA * deltaT;
@@ -271,13 +340,12 @@ void loop() {
       
       float uA_pid = kpA * eA + kdA * filtered_dedtA + kiA * eintegralA;
 
-      // CONDITIONAL GRAVITY COMPENSATION       check if necessary since the motors are self-locking
-      float kG = 30.0; //prone to change (you can try making the PID values 0 first and test this G value, increase if it droops)
+      // CONDITIONAL GRAVITY COMPENSATION
+      float kG = 30.0;
       float uG = 0.0;
       float currentAngleDegA = posA * (360.0 / PPR_A);
       
-      // True if moving up towards 0 degrees from either side
-      bool isLiftingA = (currentAngleDegA < 0.0 && currentSetpointA > posA) || //changed
+      bool isLiftingA = (currentAngleDegA < 0.0 && currentSetpointA > posA) ||
                         (currentAngleDegA > 0.0 && currentSetpointA < posA);
       
       if (isLiftingA) { 
@@ -300,10 +368,9 @@ void loop() {
   // =========================================================
   if (!targetReachedB) {
     
-    // SLEW RATE LIMITER WITH DECELERATION ZONE
     if (currentSetpointB != finalTargetB) {
       float distanceToTargetB = abs(finalTargetB - currentSetpointB);
-      float decelerationZoneB = 1000.0; // Appropriate for high PPR JGA25
+      float decelerationZoneB = 1000.0;
       float currentMaxSpeedB = MAX_SPEED_B;
 
       if (distanceToTargetB < decelerationZoneB) {
@@ -354,10 +421,9 @@ void loop() {
   // =========================================================
   if (!targetReachedC) {
     
-    // SLEW RATE LIMITER WITH DECELERATION ZONE
     if (currentSetpointC != finalTargetC) {
       float distanceToTargetC = abs(finalTargetC - currentSetpointC);
-      float decelerationZoneC = 1000.0; // Appropriate for high PPR JGA25
+      float decelerationZoneC = 1000.0;
       float currentMaxSpeedC = MAX_SPEED_C;
 
       if (distanceToTargetC < decelerationZoneC) {
@@ -392,7 +458,6 @@ void loop() {
       if (eintegralC > integralLimitC) eintegralC = integralLimitC;
       if (eintegralC < -integralLimitC) eintegralC = -integralLimitC;
       
-      // Removed gravity for distal wrist - PID + slew handles it cleanly
       float uC_total = kpC * eC + kdC * filtered_dedtC + kiC * eintegralC;
 
       if (uC_total > PWM_LIMIT) uC_total = PWM_LIMIT;
@@ -409,14 +474,13 @@ void loop() {
   // =========================================================
   if (!targetReachedD) {
     
-    // SLEW RATE LIMITER WITH DECELERATION ZONE
     if (currentSetpointD != finalTargetD) {
       float distanceToTargetD = abs(finalTargetD - currentSetpointD);
-      float decelerationZoneD = 171.0; // Optimized for 4096 PPR (~15 degrees)
+      float decelerationZoneD = 171.0;
       float currentMaxSpeedD = MAX_SPEED_D;
 
       if (distanceToTargetD < decelerationZoneD) {
-        currentMaxSpeedD = max(0.5f, MAX_SPEED_D * (distanceToTargetD / decelerationZoneD)); //prone to change, if scaled the minimum should be 25.6 PPR
+        currentMaxSpeedD = max(0.5f, MAX_SPEED_D * (distanceToTargetD / decelerationZoneD));
       }
 
       float stepD = currentMaxSpeedD * deltaT; 
@@ -442,7 +506,7 @@ void loop() {
       float currentAngleRadD = (posD * (360.0 / PPR_D)) * (PI / 180.0);
 
       float raw_dedtD = (eD - eprevD) / deltaT;
-      float alphaD = 0.15;  //prone to change (check if the PID seems to lag behind then increase the value)
+      float alphaD = 0.15;
       filtered_dedtD = (alphaD * raw_dedtD) + ((1.0 - alphaD) * filtered_dedtD);
 
       eintegralD += eD * deltaT;
@@ -451,12 +515,10 @@ void loop() {
       
       float uD_pid = kpD * eD + kdD * filtered_dedtD + kiD * eintegralD;
 
-      // RESTORED CONDITIONAL GRAVITY COMPENSATION
-      float kG_D = 30.0; //prone to change (you can try making the PID values 0 first and test this G value, increase if it droops)
+      float kG_D = 30.0;
       float uG_D = 0.0;
       float currentAngleDegD = posD * (360.0 / PPR_D);
       
-      // True if moving up towards 0 degrees from either side
       bool isLiftingD = (currentAngleDegD < 0.0 && currentSetpointD > posD) || 
                         (currentAngleDegD > 0.0 && currentSetpointD < posD);
       
@@ -521,19 +583,102 @@ void setMotorD(int dir, int pwmVal) {
 }
 
 // ==========================================
-// ENCODER ISR ROUTINES
+// AS5600 PWM DECODE (MOTOR A & D)
 // ==========================================
-void readEncoderA() { //prone to change for AS5600
-  static uint8_t old_state = 0;
-  uint8_t current_A = digitalRead(clkPinA);
-  uint8_t current_B = digitalRead(dtPinA);
-  uint8_t current_state = (current_A << 1) | current_B;
-  uint8_t movement = (old_state << 2) | current_state;
-  if (movement == 0b0001 || movement == 0b0111 || movement == 0b1110 || movement == 0b1000) counterA++;
-  else if (movement == 0b0010 || movement == 0b1011 || movement == 0b1101 || movement == 0b0100) counterA--;
-  old_state = current_state;
+
+// Selects one downstream channel on the TCA9548A mux (0-7). Only that
+// channel's device(s) are reachable on the I2C bus until the next select.
+void selectMuxChannel(uint8_t channel) {
+  Wire.beginTransmission(TCA9548A_ADDR);
+  Wire.write(1 << channel);
+  Wire.endTransmission();
 }
 
+// One-time config write: selects the given mux channel, then puts that
+// channel's AS5600 CONF register into PWM output mode at ~920 Hz. The CONF
+// register is volatile on the chip (resets on power loss), so this runs
+// once per chip every boot.
+void configureAS5600ForPWM(uint8_t muxChannel) {
+  selectMuxChannel(muxChannel);
+
+  Wire.beginTransmission(AS5600_ADDR);
+  Wire.write(0x08); // the configuration register
+  Wire.endTransmission(false);
+  Wire.requestFrom(AS5600_ADDR, 1);
+  if (Wire.available() == 0) {
+    Serial.print("ERROR: AS5600 not found on mux channel ");
+    Serial.println(muxChannel);
+    return;
+  }
+  uint8_t currentSettings = Wire.read();
+
+  Wire.beginTransmission(AS5600_ADDR);
+  Wire.write(0x08);
+  Wire.write((currentSettings & 0b00001111) | 0b11100000); // PWM out, ~920 Hz
+  Wire.endTransmission();
+}
+
+// Interrupt service routines: on every edge of the PWM signal, timestamp it
+// to work out how long the pulse was HIGH and how long the full period was.
+void catchWaveA() {
+  unsigned long rightNow = micros();
+  if (digitalRead(AS5600_PWM_PIN_A) == HIGH) {
+    totalPeriodA = rightNow - riseTimeA;
+    riseTimeA = rightNow;
+  } else {
+    highTimeA = rightNow - riseTimeA;
+  }
+}
+
+void catchWaveD() {
+  unsigned long rightNow = micros();
+  if (digitalRead(AS5600_PWM_PIN_D) == HIGH) {
+    totalPeriodD = rightNow - riseTimeD;
+    riseTimeD = rightNow;
+  } else {
+    highTimeD = rightNow - riseTimeD;
+  }
+}
+
+// Applies the per-unit zero offset and direction flip, then clamps to the
+// valid 0-4095 tick range.
+long applyAS5600Calibration(long clockTicks, int zeroOffset, bool invert) {
+  long rawAngle = clockTicks - zeroOffset;
+  if (invert) rawAngle = 4096 - rawAngle;
+  if (rawAngle < 0) rawAngle = 0;
+  if (rawAngle > 4095) rawAngle = 4095;
+  return rawAngle;
+}
+
+// Returns the current absolute position in ticks (0-4095), or -1 if no full
+// PWM cycle has been captured yet (e.g. right after boot, or the sensor is
+// disconnected). Callers should hold onto the last good value rather than
+// treating -1 as a real position.
+long readAS5600TicksA() {
+  unsigned long myHigh, myPeriod;
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    myHigh = highTimeA;
+    myPeriod = totalPeriodA;
+  }
+  if (myPeriod == 0) return -1;
+  long clockTicks = (myHigh * 4351) / myPeriod; // verify this constant against your PWM frequency setting
+  return applyAS5600Calibration(clockTicks, AS5600_ZERO_OFFSET_A, AS5600_INVERT_A);
+}
+
+long readAS5600TicksD() {
+  unsigned long myHigh, myPeriod;
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    myHigh = highTimeD;
+    myPeriod = totalPeriodD;
+  }
+  if (myPeriod == 0) return -1;
+  long clockTicks = (myHigh * 4351) / myPeriod;
+  return applyAS5600Calibration(clockTicks, AS5600_ZERO_OFFSET_D, AS5600_INVERT_D);
+}
+
+// ==========================================
+// ENCODER ISR ROUTINES (MOTOR B & C, unchanged)
+// ==========================================
 void readEncoderB() {
   if (digitalRead(ENCB_B) > 0) counterB++; else counterB--;
 }
@@ -542,18 +687,7 @@ void readEncoderC() {
   if (digitalRead(ENCB_C) > 0) counterC++; else counterC--;
 }
 
-void readEncoderD() { //prone to change for AS5600
-  static uint8_t old_state = 0;
-  uint8_t current_A = digitalRead(clkPinD);
-  uint8_t current_B = digitalRead(dtPinD);
-  uint8_t current_state = (current_A << 1) | current_B;
-  uint8_t movement = (old_state << 2) | current_state;
-  if (movement == 0b0001 || movement == 0b0111 || movement == 0b1110 || movement == 0b1000) counterD++;
-  else if (movement == 0b0010 || movement == 0b1011 || movement == 0b1101 || movement == 0b0100) counterD--;
-  old_state = current_state;
-}
-
-void readSerialTarget() { //ready for reevaluation
+void readSerialTarget() {
   while (Serial.available() > 0) {
     char inChar = (char)Serial.read();
     
@@ -577,13 +711,13 @@ void readSerialTarget() { //ready for reevaluation
           if (rawInputA < -90) rawInputA = -90;
           if (rawInputA > 90) rawInputA = 90;
           
-          static int lastRawInputA = 0; //changed
+          static int lastRawInputA = 0;
           static int currentOffsetA = 0; 
           
-          if (lastRawInputA == 0 && rawInputA != 0) { //changed
+          if (lastRawInputA == 0 && rawInputA != 0) {
               if (rawInputA < 0) currentOffsetA = OFFSET_DROP_BELOW;
               else currentOffsetA = OFFSET_DROP_ABOVE;
-          } else if (rawInputA != lastRawInputA) { //anything else besides 0 will not have offset
+          } else if (rawInputA != lastRawInputA) {
               currentOffsetA = 0;
           }
           lastRawInputA = rawInputA;
@@ -593,14 +727,14 @@ void readSerialTarget() { //ready for reevaluation
           if (compensatedTarget > MAX_COMPENSATED_ANGLE) compensatedTarget = MAX_COMPENSATED_ANGLE;
           
           targetAngleA = compensatedTarget;
-          finalTargetA = targetAngleA * (PPR_A / 360.0); //will be used in the main loop for target position
+          finalTargetA = targetAngleA * (PPR_A / 360.0);
           targetReachedA = false;
         }
         
         // --- Parse JGA25 (B) ---
         if (bIndex != -1) {
           targetAngleB = inputString.substring(bIndex + 1).toInt();
-          finalTargetB = targetAngleB * (PPR_B / 360.0); //will be used in the main loop for target position
+          finalTargetB = targetAngleB * (PPR_B / 360.0);
           targetReachedB = false;
         }
 
@@ -611,7 +745,7 @@ void readSerialTarget() { //ready for reevaluation
           if (rawInputC > 90) rawInputC = 90;
           
           targetAngleC = rawInputC;
-          finalTargetC = targetAngleC * (PPR_C / 360.0); //will be used in the main loop for target position
+          finalTargetC = targetAngleC * (PPR_C / 360.0);
           targetReachedC = false;
         }
         
@@ -625,7 +759,7 @@ void readSerialTarget() { //ready for reevaluation
           static int currentOffsetD = 0; 
           
           if (lastRawInputD == 0 && rawInputD != 0) {
-              if (rawInputD < 0) currentOffsetD = OFFSET_DROP_BELOW; //changed
+              if (rawInputD < 0) currentOffsetD = OFFSET_DROP_BELOW;
               else currentOffsetD = OFFSET_DROP_ABOVE;
           } else if (rawInputD != lastRawInputD) {
               currentOffsetD = 0;
@@ -637,7 +771,7 @@ void readSerialTarget() { //ready for reevaluation
           if (compensatedTargetD > MAX_COMPENSATED_ANGLE) compensatedTargetD = MAX_COMPENSATED_ANGLE;
           
           targetAngleD = compensatedTargetD;
-          finalTargetD = targetAngleD * (PPR_D / 360.0); //will be used in the main loop for target position
+          finalTargetD = targetAngleD * (PPR_D / 360.0);
           targetReachedD = false;
         }
       }
