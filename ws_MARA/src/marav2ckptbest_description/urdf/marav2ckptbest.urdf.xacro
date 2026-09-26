@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="marav2ckptbest">
+
+  <!-- Materials (shared across all assemblies) -->
+  <material name="Steel">
+    <color rgba="0.627 0.627 0.627 1.0"/>
+  </material>
+
+  <!-- Assembly includes -->
+  <xacro:include filename="$(find marav2ckptbest_description)/urdf/assemblies/marav2ckptbest.urdf.xacro"/>
+
+  <!-- Instantiate assemblies -->
+  <xacro:marav2ckptbest prefix=""/>
+
+</robot>

@@ -1,0 +1,10 @@
+link,parent_joint,joint_type,rule,original_roll_deg,original_pitch_deg,original_yaw_deg,post_roll_deg,post_pitch_deg,post_yaw_deg,role
+base_link,,root,auto,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,root_x_forward_z_up
+elbow_arm,Revolute_7,continuous,auto,0.000000,0.000000,0.000000,-90.000000,0.000000,90.000000,revolute_axis_z
+elbow_link,Rigid_6,fixed,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
+gripper_teeth,Slider_10,prismatic,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
+gripper_teeth2,Slider_11,prismatic,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
+shoulder_arm,Revolute_5,continuous,auto,0.000000,0.000000,0.000000,90.000000,0.000000,90.000000,revolute_axis_z
+shoulder_link,Revolute_1,continuous,auto,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,revolute_axis_z
+wrist_arm,Revolute_9,continuous,auto,0.000000,0.000000,0.000000,90.000000,0.000000,90.000000,revolute_axis_z
+wrist_link,Rigid_8,fixed,keep,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,unchanged
