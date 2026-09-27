@@ -2,7 +2,7 @@
 #include <util/atomic.h>
 
 const int PWM_PIN = 3;
-const int PWM_PIN_2 = 19;
+const int PWM_PIN_2 = 2;
 const int AS5600_ADDR = 0x36;
 
 struct PWMData {
@@ -18,7 +18,8 @@ void TCA9548A(uint8_t bus) {
   Wire.beginTransmission(0x70);  
   Wire.write(1 << bus);          
   Wire.endTransmission();
-  Serial.print(bus);
+  Serial.print("Selected mux channel ");
+  Serial.println(bus);
 }
 
 void configureAS5600(uint8_t bus) {
@@ -29,7 +30,7 @@ void configureAS5600(uint8_t bus) {
   Wire.endTransmission(false);
   Wire.requestFrom(AS5600_ADDR, 1);
   if (Wire.available() == 0) {
-    Serial.println("ERROR: AS5600 not found on I2C bus!");
+    Serial.println("AS5600 not found on I2C bus");
     while (1);
   }
   uint8_t currentSettings = Wire.read();
@@ -43,8 +44,8 @@ void configureAS5600(uint8_t bus) {
 void setup() {
   Serial.begin(115200);
   Wire.begin();
-  configureAS5600(2);
-  configureAS5600(3);
+  configureAS5600(6);
+  configureAS5600(7);
 
   pinMode(PWM_PIN, INPUT);
   attachInterrupt(digitalPinToInterrupt(PWM_PIN), catchWave, CHANGE);
@@ -94,13 +95,13 @@ void loop() {
 
   float angle1 = calculateAngle(high1, period1);
   if (angle1 >= 0) {
-    Serial.print("AS5600 bus 2 angle: ");
+    Serial.print("AS5600 bus 6 angle: ");
     Serial.println(angle1);
   }
 
   float angle2 = calculateAngle(high2, period2);
   if (angle2 >= 0) {
-    Serial.print("AS5600 bus 3 angle: ");
+    Serial.print("AS5600 bus 7 angle: ");
     Serial.println(angle2);
   }
 
