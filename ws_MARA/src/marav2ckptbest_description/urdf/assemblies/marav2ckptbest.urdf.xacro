@@ -229,7 +229,7 @@
       <parent link="${prefix}elbow_link"/>
       <child link="${prefix}elbow_arm"/>
       <origin xyz="-0.045000 0.000000 0.366000" rpy="-1.570796 0.000000 1.570796"/>
-      <axis xyz="0.000000 0.000000 1.000000"/>
+      <axis xyz="0.000000 0.000000 -1.000000"/>
       <limit effort="100.0" velocity="1.00"/>
     </joint>
 
@@ -260,6 +260,7 @@
       <child link="${prefix}gripper_teeth2"/>
       <origin xyz="0.000000 0.125000 0.000000" rpy="-1.570796 -1.570796 0.000000"/>
       <axis xyz="1.000000 0.000000 0.000000"/>
+      <mimic joint="${prefix}Slider_10" multiplier="-1.000000"/>
       <limit lower="-0.040000" upper="0.000000" effort="100.0" velocity="1.00"/>
     </joint>
 
@@ -317,8 +318,8 @@
         <state_interface name="effort"/>
       </joint>
       <joint name="${prefix}Slider_11">
-        <command_interface name="position"/>
-        <command_interface name="velocity"/>
+        <param name="mimic">${prefix}Slider_10</param>
+        <param name="multiplier">-1.0</param>
         <state_interface name="position">
           <param name="initial_value">0.0</param>
         </state_interface>

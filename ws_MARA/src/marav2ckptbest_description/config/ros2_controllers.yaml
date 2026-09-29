@@ -19,11 +19,11 @@
   # Command topic: /position_controller/commands
   position_controller:
     ros__parameters:
-      joints: [Revolute_1, Revolute_5, Revolute_7, Revolute_9, Slider_10, Slider_11]
+      joints: [Revolute_1, Revolute_5, Revolute_7, Revolute_9, Slider_10]
       interface_name: position
 
   # Command topic: /velocity_controller/commands
   velocity_controller:
     ros__parameters:
-      joints: [Revolute_1, Revolute_5, Revolute_7, Revolute_9, Slider_10, Slider_11]
+      joints: [Revolute_1, Revolute_5, Revolute_7, Revolute_9, Slider_10]
       interface_name: velocity

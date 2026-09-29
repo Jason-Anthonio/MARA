@@ -18,4 +18,3 @@ joint_state_publisher:
       - Revolute_7
       - Revolute_9
       - Slider_10
-      - Slider_11
