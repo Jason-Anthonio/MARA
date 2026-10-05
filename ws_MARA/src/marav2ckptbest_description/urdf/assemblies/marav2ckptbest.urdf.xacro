@@ -203,20 +203,20 @@
     </link>
 
     <!-- Joints (internal to assembly) -->
-    <joint name="${prefix}Revolute_1" type="continuous">
+    <joint name="${prefix}Revolute_1" type="revolute">
       <parent link="${prefix}base_link"/>
       <child link="${prefix}shoulder_link"/>
       <origin xyz="0.000000 0.000000 0.166000" rpy="0.000000 0.000000 0.000000"/>
       <axis xyz="0.000000 0.000000 1.000000"/>
-      <limit effort="100.0" velocity="1.00"/>
+      <limit lower="-1.570796" upper="1.570796" effort="100.0" velocity="1.00"/>
     </joint>
 
-    <joint name="${prefix}Revolute_5" type="continuous">
+    <joint name="${prefix}Revolute_5" type="revolute">
       <parent link="${prefix}shoulder_link"/>
       <child link="${prefix}shoulder_arm"/>
       <origin xyz="0.050000 0.000000 0.060000" rpy="1.570796 0.000000 1.570796"/>
       <axis xyz="0.000000 0.000000 1.000000"/>
-      <limit effort="100.0" velocity="1.00"/>
+      <limit lower="-1.570796" upper="1.570796" effort="100.0" velocity="1.00"/>
     </joint>
 
     <joint name="${prefix}Rigid_6" type="fixed">
@@ -225,12 +225,12 @@
       <origin xyz="0.000000 -0.226000 -0.050000" rpy="-1.570796 -1.570796 0.000000"/>
     </joint>
 
-    <joint name="${prefix}Revolute_7" type="continuous">
+    <joint name="${prefix}Revolute_7" type="revolute">
       <parent link="${prefix}elbow_link"/>
       <child link="${prefix}elbow_arm"/>
       <origin xyz="-0.045000 0.000000 0.366000" rpy="-1.570796 0.000000 1.570796"/>
       <axis xyz="0.000000 0.000000 -1.000000"/>
-      <limit effort="100.0" velocity="1.00"/>
+      <limit lower="-1.570796" upper="1.570796" effort="100.0" velocity="1.00"/>
     </joint>
 
     <joint name="${prefix}Rigid_8" type="fixed">
@@ -239,12 +239,12 @@
       <origin xyz="0.000000 0.366000 -0.045000" rpy="1.570796 1.570796 0.000000"/>
     </joint>
 
-    <joint name="${prefix}Revolute_9" type="continuous">
+    <joint name="${prefix}Revolute_9" type="revolute">
       <parent link="${prefix}wrist_link"/>
       <child link="${prefix}wrist_arm"/>
       <origin xyz="0.050000 0.000000 0.506000" rpy="1.570796 0.000000 1.570796"/>
       <axis xyz="0.000000 0.000000 1.000000"/>
-      <limit effort="100.0" velocity="1.00"/>
+      <limit lower="-1.570796" upper="1.570796" effort="100.0" velocity="1.00"/>
     </joint>
 
     <joint name="${prefix}Slider_10" type="prismatic">
@@ -267,7 +267,7 @@
     <!-- ROS 2 control: generated generic system -->
     <ros2_control name="${prefix}marav2ckptbest_system" type="system">
       <hardware>
-        <plugin>mock_components/GenericSystem</plugin>
+        <plugin>marav2ckptbest_hardware/StepHardware</plugin>
         <param name="cmd_topic">sim/marav2ckptbest_system/cmd</param>
         <param name="state_topic">sim/marav2ckptbest_system/state</param>
       </hardware>

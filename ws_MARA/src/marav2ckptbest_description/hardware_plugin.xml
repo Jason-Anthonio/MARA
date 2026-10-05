@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<library path="marav2ckptbest_hardware">
+  <class name="marav2ckptbest_hardware/StepHardware"
+         type="marav2ckptbest_hardware::StepHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>Simple position and velocity hardware for RViz step testing.</description>
+  </class>
+</library>

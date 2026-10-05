@@ -203,7 +203,7 @@ links:
 
 joints:
   Revolute_1:
-    type: continuous
+    type: revolute
     parent: base_link
     child: shoulder_link
     origin_xyz_m: [0.000000, 0.000000, 0.166000]
@@ -212,7 +212,7 @@ joints:
     is_mount: false
     passive: false
   Revolute_5:
-    type: continuous
+    type: revolute
     parent: shoulder_link
     child: shoulder_arm
     origin_xyz_m: [0.050000, 0.000000, 0.060000]
@@ -221,7 +221,7 @@ joints:
     is_mount: false
     passive: false
   Revolute_7:
-    type: continuous
+    type: revolute
     parent: elbow_link
     child: elbow_arm
     origin_xyz_m: [-0.045000, 0.000000, 0.366000]
@@ -230,7 +230,7 @@ joints:
     is_mount: false
     passive: false
   Revolute_9:
-    type: continuous
+    type: revolute
     parent: wrist_link
     child: wrist_arm
     origin_xyz_m: [0.050000, 0.000000, 0.506000]

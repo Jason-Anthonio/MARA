@@ -204,20 +204,20 @@
     </collision>
   </link>
 
-  <joint name="Revolute_1" type="continuous">
+  <joint name="Revolute_1" type="revolute">
     <parent link="base_link"/>
     <child link="shoulder_link"/>
     <origin xyz="0.000000 0.000000 0.166000" rpy="0.000000 0.000000 0.000000"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit effort="100.0" velocity="1.00"/>
+    <limit lower="-1.570796" upper="1.570796" effort="100.0" velocity="1.00"/>
   </joint>
 
-  <joint name="Revolute_5" type="continuous">
+  <joint name="Revolute_5" type="revolute">
     <parent link="shoulder_link"/>
     <child link="shoulder_arm"/>
     <origin xyz="0.050000 0.000000 0.060000" rpy="1.570796 0.000000 1.570796"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit effort="100.0" velocity="1.00"/>
+    <limit lower="-1.570796" upper="1.570796" effort="100.0" velocity="1.00"/>
   </joint>
 
   <joint name="Rigid_6" type="fixed">
@@ -226,12 +226,12 @@
     <origin xyz="0.000000 -0.226000 -0.050000" rpy="-1.570796 -1.570796 0.000000"/>
   </joint>
 
-  <joint name="Revolute_7" type="continuous">
+  <joint name="Revolute_7" type="revolute">
     <parent link="elbow_link"/>
     <child link="elbow_arm"/>
     <origin xyz="-0.045000 0.000000 0.366000" rpy="-1.570796 0.000000 1.570796"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit effort="100.0" velocity="1.00"/>
+    <limit lower="-1.570796" upper="1.570796" effort="100.0" velocity="1.00"/>
   </joint>
 
   <joint name="Rigid_8" type="fixed">
@@ -240,12 +240,12 @@
     <origin xyz="0.000000 0.366000 -0.045000" rpy="1.570796 1.570796 0.000000"/>
   </joint>
 
-  <joint name="Revolute_9" type="continuous">
+  <joint name="Revolute_9" type="revolute">
     <parent link="wrist_link"/>
     <child link="wrist_arm"/>
     <origin xyz="0.050000 0.000000 0.506000" rpy="1.570796 0.000000 1.570796"/>
     <axis xyz="0.000000 0.000000 1.000000"/>
-    <limit effort="100.0" velocity="1.00"/>
+    <limit lower="-1.570796" upper="1.570796" effort="100.0" velocity="1.00"/>
   </joint>
 
   <joint name="Slider_10" type="prismatic">
