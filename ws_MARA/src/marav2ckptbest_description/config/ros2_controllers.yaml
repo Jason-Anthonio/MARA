@@ -1,6 +1,3 @@
-# Generated ros2_control controllers
-# Publishes joint states on: /joint_states
-# Command topics use: /<controller_name>/commands
 /**:
   controller_manager:
     ros__parameters:
@@ -10,19 +7,31 @@
         type: joint_state_broadcaster/JointStateBroadcaster
       position_controller:
         type: forward_command_controller/ForwardCommandController
+      trajectory_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
       velocity_controller:
         type: forward_command_controller/ForwardCommandController
 
   joint_state_broadcaster:
     ros__parameters: {}
 
-  # Command topic: /position_controller/commands
+  #Command topic: /position_controller/commands
   position_controller:
     ros__parameters:
       joints: [Revolute_1, Revolute_5, Revolute_7, Revolute_9, Slider_10]
       interface_name: position
 
-  # Command topic: /velocity_controller/commands
+  #FollowJointTrajectory command interface
+  trajectory_controller:
+    ros__parameters:
+      joints: [Revolute_1, Revolute_5, Revolute_7, Revolute_9, Slider_10]
+      command_interfaces:
+        - position
+      state_interfaces:
+        - position
+        - velocity
+
+  #Command topic: /velocity_controller/commands
   velocity_controller:
     ros__parameters:
       joints: [Revolute_1, Revolute_5, Revolute_7, Revolute_9, Slider_10]

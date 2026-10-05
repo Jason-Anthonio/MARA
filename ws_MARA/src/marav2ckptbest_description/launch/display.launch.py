@@ -72,8 +72,8 @@ def generate_launch_description():
             Node(
                 package='controller_manager',
                 executable='spawner',
-                name='spawn_position_controller',
-                arguments=['position_controller', '--controller-manager', 'controller_manager'],
+                name='spawn_trajectory_controller',
+                arguments=['trajectory_controller', '--controller-manager', 'controller_manager'],
                 output='screen',
             ),
 

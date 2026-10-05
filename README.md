@@ -15,7 +15,13 @@ ros2 launch marav2ckptbest_description display.launch.py
 ros2 control list_controllers
 ## make sure they're all active
 
-# using the position
+# using a smooth trajectory
+ros2 topic pub --once /trajectory_controller/joint_trajectory \
+  trajectory_msgs/msg/JointTrajectory \
+  "{joint_names: [Revolute_1, Revolute_5, Revolute_7, Revolute_9, Slider_10], points: [{positions: [1.5708, 0.0, 0.0, 0.0, 0.02], time_from_start: {sec: 3, nanosec: 0}}]}"
+
+# using the direct position command without step animation
+## currently replaced by joint trajectory
 ros2 topic pub --once /position_controller/commands \
   std_msgs/msg/Float64MultiArray \
   "{data: [1.5708, 0.0, 0.0, 0.0, 0.0]}"
@@ -27,7 +33,7 @@ gripper is maxed at 0.04 for closed grip
 
 # using the velocity
 ## disabling the position controller
-ros2 control switch_controllers --deactivate position_controller
+ros2 control switch_controllers --deactivate trajectory_controller
 
 ## running
 ros2 topic pub -r 10 /velocity_controller/commands \
