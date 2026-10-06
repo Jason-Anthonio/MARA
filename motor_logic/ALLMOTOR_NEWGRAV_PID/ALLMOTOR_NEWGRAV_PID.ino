@@ -1,26 +1,20 @@
 #include <util/atomic.h>
 #include <math.h> 
 
-// ==========================================
-// --- MOTION PROFILING (STEPPER FEEL) ---
-// ==========================================
-// Controls how fast the setpoint moves. Lower = Slower & Smoother.
-const float MAX_SPEED_A = 3.0;   // Pulses/sec (PPR 80) -> ~13.5 deg/sec
-const float MAX_SPEED_B = 500.0; // Pulses/sec (PPR 17520) -> ~10.2 deg/sec
-const float MAX_SPEED_C = 500.0; // Pulses/sec (PPR 17520) -> ~10.2 deg/sec
-const float MAX_SPEED_D = 3.0;   // Pulses/sec (PPR 80) -> ~13.5 deg/sec
+const float MAX_SPEED_A = 3.0;   // Pulses/sec (PPR 80)-> 13.5 deg/sec
+//the 4058GW31ZY motor (BIG MOTOR) uses an external rotary encoder KY-040 with 20 PPR. But we used quadrature encoding, making it 4 * 20 PPR.
+const float MAX_SPEED_B = 500.0; // Pulses/sec (PPR 17520)-> 10.2 deg/sec
+//the JGA25-370 motor encoder is 1095 PPR from the hall effect encoder multiplied by the motor's own gear ratio as well as the 16:1 external gearbox ratio
+const float MAX_SPEED_C = 500.0; // Pulses/sec (PPR 17520)-> 10.2 deg/sec
+const float MAX_SPEED_D = 3.0;   // Pulses/sec (PPR 80)-> 13.5 deg/sec
 
-// ==========================================
-// --- MOTOR ERROR COMPENSATION CONFIG ---
-// ==========================================
-const int OFFSET_DROP_BELOW = 0;      
+//these four variables are offsets to the initial target to use in case they are a bit off from the theoretical position.
+const int OFFSET_DROP_BELOW = 0;      //this is to add the offset
 const int OFFSET_DROP_ABOVE = 0;      
-const int MIN_COMPENSATED_ANGLE = -15; //prone to change when using AS5600
-const int MAX_COMPENSATED_ANGLE = 195; //prone to change when using AS5600
+const int MIN_COMPENSATED_ANGLE = -90; //this is the limit of the total target angle including the offset
+const int MAX_COMPENSATED_ANGLE = 90;
 
-// ==========================================
-// MOTOR A: BIGMOTOR (SHOULDER JOINT)
-// ==========================================
+//MOTOR A (Shoulder Joint)
 const int clkPinA = 3;  
 const int dtPinA = 21;
 #define IN1_A 7
@@ -35,7 +29,7 @@ float filtered_dedtA = 0.0;
 
 float currentSetpointA = 0.0; 
 float finalTargetA = 0.0;     
-int targetAngleA = 90; //prone to change since IK does not start at 90 degrees
+int targetAngleA = 0;
 bool targetReachedA = true;
 
 float kpA = 12.0; 
@@ -43,9 +37,7 @@ float kiA = 9.0;
 float kdA = 1.6; 
 const float integralLimitA = 200.0;
 
-// ==========================================
-// MOTOR B: JGA25 (BASE JOINT)
-// ==========================================
+//MOTOR B (Waist Joint)
 #define ENCA_B 2
 #define ENCB_B 22
 #define PWM_PIN_B 8
@@ -69,9 +61,7 @@ float kiB = 0.06;
 float kdB = 0.0070;
 const float integralLimitB = 1600.0;
 
-// ==========================================
-// MOTOR C: JGA25 (WRIST JOINT)
-// ==========================================
+//MOTOR C (Wrist Joint)
 #define ENCA_C 18 
 #define ENCB_C 25
 #define PWM_PIN_C 5 
@@ -88,7 +78,7 @@ float filtered_dedtC = 0.0;
 
 float currentSetpointC = 0.0; 
 float finalTargetC = 0.0;     
-int targetAngleC = 90; //prone to change since IK does not start at 90 degrees
+int targetAngleC = 0;
 bool targetReachedC = true;
 
 float kpC = 0.6965; 
@@ -96,9 +86,7 @@ float kiC = 0.06;
 float kdC = 0.0070; 
 const float integralLimitC = 1600.0;
 
-// ==========================================
-// MOTOR D: BIGMOTOR (ELBOW JOINT)
-// ==========================================
+//MOTOR D (Elbow Joint)
 const int clkPinD = 19;  
 const int dtPinD = 20;
 #define IN1_D 11
@@ -113,7 +101,7 @@ float filtered_dedtD = 0.0;
 
 float currentSetpointD = 0.0; 
 float finalTargetD = 0.0;     
-int targetAngleD = 90; //prone to change since IK does not start at 90 degrees
+int targetAngleD = 0;
 bool targetReachedD = true;
 
 float kpD = 12.0; 
@@ -121,9 +109,7 @@ float kiD = 9.0;
 float kdD = 1.6; 
 const float integralLimitD = 200.0;
 
-// ==========================================
-// GLOBAL SYSTEM VARIABLES
-// ==========================================
+//GLOBAL VARIABLES
 const unsigned long PID_SAMPLE_US = 10000;
 const unsigned long PRINT_MS = 100;
 const int PWM_LIMIT = 255;
@@ -132,7 +118,6 @@ unsigned long prevPidMicros = 0;
 unsigned long prevPrintMillis = 0;
 String inputString = "";
 
-// Function Prototypes
 void readEncoderA();
 void readEncoderB();
 void readEncoderC();
@@ -146,7 +131,7 @@ void readSerialTarget();
 void setup() {
   Serial.begin(115200);
 
-  // Setup Motor A
+  //Setup Motor A
   pinMode(clkPinA, INPUT_PULLUP);
   pinMode(dtPinA, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(clkPinA), readEncoderA, CHANGE);
@@ -154,12 +139,13 @@ void setup() {
   pinMode(IN1_A, OUTPUT);
   pinMode(IN2_A, OUTPUT);
   
-  counterA = (long)(90.0 * (PPR_A / 360.0)); //(prone to change since IK does not start at 90 degrees)
-  currentSetpointA = counterA; //the smaller target positions to reach the final target position
-  finalTargetA = counterA; //final target position
+  counterA = 0;
+  currentSetpointA = counterA; //moves the motor by steps like a stepper motor
+  //Because me and my team challenged to use DC motors to create an industrial robot arm, we had to find some workarounds to make the arm work with safety and precision.
+  finalTargetA = counterA;
   setMotorA(0, 0);
 
-  // Setup Motor B
+  //Setup Motor B
   pinMode(ENCA_B, INPUT);
   pinMode(ENCB_B, INPUT);
   attachInterrupt(digitalPinToInterrupt(ENCA_B), readEncoderB, RISING);
@@ -167,12 +153,12 @@ void setup() {
   pinMode(IN1_B, OUTPUT);
   pinMode(IN2_B, OUTPUT);
   
-  counterB = 0; //counter is the real encoder values read constantly
+  counterB = 0;
   currentSetpointB = counterB; 
   finalTargetB = counterB; 
   setMotorB(0, 0);
 
-  // Setup Motor C
+  //Setup Motor C
   pinMode(STDBY, OUTPUT);
   pinMode(ENCA_C, INPUT);
   pinMode(ENCB_C, INPUT);
@@ -181,12 +167,12 @@ void setup() {
   pinMode(IN1_C, OUTPUT);
   pinMode(IN2_C, OUTPUT);
   
-  counterC = (long)(90.0 * (PPR_C / 360.0)); //(prone to change since IK does not start at 90 degrees)
+  counterC = 0;
   currentSetpointC = counterC; 
   finalTargetC = counterC; 
   setMotorC(0, 0);
 
-  // Setup Motor D
+  //Setup Motor D
   pinMode(clkPinD, INPUT_PULLUP);
   pinMode(dtPinD, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(clkPinD), readEncoderD, CHANGE);
@@ -194,15 +180,14 @@ void setup() {
   pinMode(IN1_D, OUTPUT);
   pinMode(IN2_D, OUTPUT);
   
-  counterD = (long)(90.0 * (PPR_D / 360.0)); //(prone to change since IK does not start at 90 degrees)
+  counterD = 0;
   currentSetpointD = counterD; 
   finalTargetD = counterD; 
   setMotorD(0, 0);
 
-  Serial.println("Quad Motor PID System Ready.");
-  Serial.println("Commands: A<angle>, B<angle>, C<angle>, D<angle>. Ex: A45 B180 C0 D90");
-  Serial.println("WARNING: Ensure Motor A, C, and D are pointing STRAIGHT UP (90 deg) before starting!");
-  //when prone to change, the joints straight up will be 0 degrees (the range is -90 to 90)
+  Serial.println("Setup Succesful");
+  Serial.println("Commands: A<angle>, B<angle>, C<angle>, D<angle>. Angles: -90 to 90 deg. Ex: A45 B90 C-90 D0");
+  Serial.println("Ensure all motor zero positions match the URDF zero position before starting");
 
   prevPidMicros = micros();
 }
@@ -212,12 +197,12 @@ void loop() {
   readSerialTarget();
 
   unsigned long now = micros();
-  if (now - prevPidMicros < PID_SAMPLE_US) return; //returns to top loop 
+  if (now - prevPidMicros < PID_SAMPLE_US) return;
   
-  float deltaT = (now - prevPidMicros) / 1000000.0; //seconds
+  float deltaT = (now - prevPidMicros) / 1000000.0; //to seconds
   prevPidMicros = now;
 
-  long posA = 0, posB = 0, posC = 0, posD = 0; //the variable used to store counter variables safely
+  long posA = 0, posB = 0, posC = 0, posD = 0;
   
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     posA = counterA; 
@@ -226,27 +211,26 @@ void loop() {
     posD = counterD;
   }
 
-  // =========================================================
-  // --- PID MOTOR A (BIGMOTOR - SHOULDER) ---
-  // =========================================================
+  //PID MOTOR A - SHOULDER
   if (!targetReachedA) {
     
-    // SLEW RATE LIMITER WITH DECELERATION ZONE
+    //SLEW RATE LIMITING & DECELERATION ZONE
     if (currentSetpointA != finalTargetA) {
       float distanceToTargetA = abs(finalTargetA - currentSetpointA);
-      float decelerationZoneA = 4.0; // Optimized for 80 PPR (~18 degrees)
+      float decelerationZoneA = 4.0; //in 80 PPR deceleration starts at 18 degrees
       float currentMaxSpeedA = MAX_SPEED_A;
 
       if (distanceToTargetA < decelerationZoneA) {
-        currentMaxSpeedA = max(0.5f, MAX_SPEED_A * (distanceToTargetA / decelerationZoneA)); //range between 0.5 PPR to 3.0 (2.4 to 13.5 deg/sec)
+        currentMaxSpeedA = max(0.5f, MAX_SPEED_A * (distanceToTargetA / decelerationZoneA)); //limited 0.5 PPR to 3.0 (2.4 to 13.5 deg/sec)
+        //this is becaue the heavy arm caused overshoot and risks gearbox slip in downwards movement
       }
 
       float stepA = currentMaxSpeedA * deltaT; 
 
       if (distanceToTargetA <= stepA) {
-        currentSetpointA = finalTargetA;  //(prone to change)
+        currentSetpointA = finalTargetA;
       } else if (finalTargetA > currentSetpointA) {
-        currentSetpointA += stepA;  //updates the small target position by each allowable rotation/step (prone to change)
+        currentSetpointA += stepA;
       } else {
         currentSetpointA -= stepA; 
       }
@@ -264,48 +248,46 @@ void loop() {
       float currentAngleRad = (posA * (360.0 / PPR_A)) * (PI / 180.0);
       
       float raw_dedtA = (eA - eprevA) / deltaT;
-      float alpha = 0.15; //prone to change depending on the outcome of AS5600 
-      filtered_dedtA = (alpha * raw_dedtA) + ((1.0 - alpha) * filtered_dedtA); //prone to change depending on the outcome of AS5600
+      float alpha = 0.15; //this filter method is used to smoothen out the derivative response when there are spikes in the current dervative value from the encoder readings.
+      filtered_dedtA = (alpha * raw_dedtA) + ((1.0 - alpha) * filtered_dedtA);
 
       eintegralA += eA * deltaT;
-      if (eintegralA > integralLimitA) eintegralA = integralLimitA; //(prone to change)
-      if (eintegralA < -integralLimitA) eintegralA = -integralLimitA; //(prone to change)
+      if (eintegralA > integralLimitA) eintegralA = integralLimitA;
+      if (eintegralA < -integralLimitA) eintegralA = -integralLimitA;
       
       float uA_pid = kpA * eA + kdA * filtered_dedtA + kiA * eintegralA;
 
-      // CONDITIONAL GRAVITY COMPENSATION
+      //CONDITIONAL GRAVITY COMPENSATION
+      //this condition is to assist the motor when the arm is lifting against gravity
       float kG = 30.0;
       float uG = 0.0;
       float currentAngleDegA = posA * (360.0 / PPR_A);
-      
-      // True if moving up towards 90 degrees from either side
-      bool isLiftingA = (currentAngleDegA < 90.0 && currentSetpointA > posA) || //(prone to change since IK does not start at 90 degrees)
-                        (currentAngleDegA > 90.0 && currentSetpointA < posA);
+
+      bool isLiftingA = (currentAngleDegA < 0.0 && currentSetpointA > posA) ||
+                        (currentAngleDegA > 0.0 && currentSetpointA < posA);
       
       if (isLiftingA) { 
-          uG = kG * cos(currentAngleRad); 
+          uG = kG * cos(currentAngleRad + (90.0 * PI / 180.0));
       }
       
-      float uA_total = uA_pid + uG; //check validity since normal IK can range to -90 not 0 degrees
+      float uA_total = uA_pid + uG;
 
       if (uA_total > PWM_LIMIT) uA_total = PWM_LIMIT;
       if (uA_total < -PWM_LIMIT) uA_total = -PWM_LIMIT;
 
-      int dirA = (uA_total > 0) ? 1 : ((uA_total < 0) ? -1 : 0); //check if necessary since the motors are self-locking
+      int dirA = (uA_total > 0) ? 1 : ((uA_total < 0) ? -1 : 0);
       setMotorA(dirA, abs((int)uA_total));
       eprevA = eA; 
     }
   }
 
-  // =========================================================
-  // --- PID MOTOR B (BASE JGA25) ---
-  // =========================================================
+  //PID MOTOR B - WAIST
   if (!targetReachedB) {
     
-    // SLEW RATE LIMITER WITH DECELERATION ZONE
+    //SLEW RATE LIMITING & DECELERATION ZONE
     if (currentSetpointB != finalTargetB) {
       float distanceToTargetB = abs(finalTargetB - currentSetpointB);
-      float decelerationZoneB = 1000.0; // Appropriate for high PPR JGA25
+      float decelerationZoneB = 1000.0; //in 17520 PPR deceleration starts at 20.5 degrees
       float currentMaxSpeedB = MAX_SPEED_B;
 
       if (distanceToTargetB < decelerationZoneB) {
@@ -333,7 +315,7 @@ void loop() {
       filtered_dedtB = 0;
     } else {
       float raw_dedtB = (eB - eprevB) / deltaT;
-      float alphaB = 0.15; //prone to change depending on the outcome of AS5600
+      float alphaB = 0.15;
       filtered_dedtB = (alphaB * raw_dedtB) + ((1.0 - alphaB) * filtered_dedtB);
       
       eintegralB += eB * deltaT;
@@ -351,15 +333,13 @@ void loop() {
     }
   }
 
-  // =========================================================
-  // --- PID MOTOR C (WRIST JGA25) ---
-  // =========================================================
+  //PID MOTOR C - WRIST
   if (!targetReachedC) {
     
-    // SLEW RATE LIMITER WITH DECELERATION ZONE
+    //SLEW RATE LIMITING & DECELERATION ZONE
     if (currentSetpointC != finalTargetC) {
       float distanceToTargetC = abs(finalTargetC - currentSetpointC);
-      float decelerationZoneC = 1000.0; // Appropriate for high PPR JGA25
+      float decelerationZoneC = 1000.0;
       float currentMaxSpeedC = MAX_SPEED_C;
 
       if (distanceToTargetC < decelerationZoneC) {
@@ -393,8 +373,7 @@ void loop() {
       eintegralC += eC * deltaT;
       if (eintegralC > integralLimitC) eintegralC = integralLimitC;
       if (eintegralC < -integralLimitC) eintegralC = -integralLimitC;
-      
-      // Removed gravity for distal wrist - PID + slew handles it cleanly
+
       float uC_total = kpC * eC + kdC * filtered_dedtC + kiC * eintegralC;
 
       if (uC_total > PWM_LIMIT) uC_total = PWM_LIMIT;
@@ -406,15 +385,13 @@ void loop() {
     }
   }
 
-  // =========================================================
-  // --- PID MOTOR D (BIGMOTOR ELBOW) ---
-  // =========================================================
+  //PID MOTOR D - ELBOW
   if (!targetReachedD) {
     
-    // SLEW RATE LIMITER WITH DECELERATION ZONE
+    //SLEW RATE LIMITING & DECELERATION ZONE
     if (currentSetpointD != finalTargetD) {
       float distanceToTargetD = abs(finalTargetD - currentSetpointD);
-      float decelerationZoneD = 4.0; // Optimized for 80 PPR (~18 degrees)
+      float decelerationZoneD = 4.0;
       float currentMaxSpeedD = MAX_SPEED_D;
 
       if (distanceToTargetD < decelerationZoneD) {
@@ -441,6 +418,7 @@ void loop() {
       eprevD = 0;
       filtered_dedtD = 0; 
     } else {
+      float currentAngleRadA = (posA * (360.0 / PPR_A)) * (PI / 180.0);
       float currentAngleRadD = (posD * (360.0 / PPR_D)) * (PI / 180.0);
 
       float raw_dedtD = (eD - eprevD) / deltaT;
@@ -453,18 +431,10 @@ void loop() {
       
       float uD_pid = kpD * eD + kdD * filtered_dedtD + kiD * eintegralD;
 
-      // RESTORED CONDITIONAL GRAVITY COMPENSATION
+      //GRAVITY COMPENSATION
       float kG_D = 30.0; 
-      float uG_D = 0.0;
-      float currentAngleDegD = posD * (360.0 / PPR_D);
-      
-      // True if moving up towards 90 degrees from either side
-      bool isLiftingD = (currentAngleDegD < 90.0 && currentSetpointD > posD) || 
-                        (currentAngleDegD > 90.0 && currentSetpointD < posD);
-      
-      if (isLiftingD) { 
-          uG_D = kG_D * cos(currentAngleRadD); 
-      }
+      float forearmGravityAngleRad = currentAngleRadA + currentAngleRadD + (90.0 * PI / 180.0);
+      float uG_D = kG_D * cos(forearmGravityAngleRad);
       
       float uD_total = uD_pid + uG_D;
 
@@ -477,7 +447,7 @@ void loop() {
     }
   }
 
-  // --- DEBUG OUTPUT ---
+  //OUTPUTS
   if (millis() - prevPrintMillis >= PRINT_MS) {
     if (!targetReachedA || !targetReachedB || !targetReachedC || !targetReachedD) {
       Serial.print("A[P:"); Serial.print(posA); 
@@ -493,9 +463,7 @@ void loop() {
   }
 }
 
-// ==========================================
-// HARDWARE CONTROL FUNCTIONS
-// ==========================================
+//MOTOR CONTROL FUNCTIONS
 void setMotorA(int dir, int pwmVal) {
   if (dir == 1) { analogWrite(IN1_A, pwmVal); digitalWrite(IN2_A, LOW); } 
   else if (dir == -1) { digitalWrite(IN1_A, LOW); analogWrite(IN2_A, pwmVal); } 
@@ -522,10 +490,11 @@ void setMotorD(int dir, int pwmVal) {
   else { digitalWrite(IN1_D, LOW); digitalWrite(IN2_D, LOW); }
 }
 
-// ==========================================
-// ENCODER ISR ROUTINES
-// ==========================================
-void readEncoderA() { //prone to change for AS5600
+//ENCODER READING FUNCTIONS
+void readEncoderA() {
+  //Shoulder and Elbow Motors use external rotary encoder ky040 with 20 PPR
+  //Here we used two interrupt pins for both clk and dt to start the function when either one of them is changes their edge.
+  //The function reads the current state of both clk and dt, and compares it with the previous state to determine the direction of rotation.
   static uint8_t old_state = 0;
   uint8_t current_A = digitalRead(clkPinA);
   uint8_t current_B = digitalRead(dtPinA);
@@ -537,6 +506,9 @@ void readEncoderA() { //prone to change for AS5600
 }
 
 void readEncoderB() {
+  //Wrist and Waist Motors use internal hall effect encoders that produces 17520 PPR with the external gearbox.
+  //We used an interrupt pin for the A channel to trigger the function on rising edge.
+  //Whether or not the B channel folows up with high or low determines the direction of rotation.
   if (digitalRead(ENCB_B) > 0) counterB++; else counterB--;
 }
 
@@ -544,7 +516,7 @@ void readEncoderC() {
   if (digitalRead(ENCB_C) > 0) counterC++; else counterC--;
 }
 
-void readEncoderD() { //prone to change for AS5600
+void readEncoderD() {
   static uint8_t old_state = 0;
   uint8_t current_A = digitalRead(clkPinD);
   uint8_t current_B = digitalRead(dtPinD);
@@ -555,7 +527,7 @@ void readEncoderD() { //prone to change for AS5600
   old_state = current_state;
 }
 
-void readSerialTarget() { //DONE
+void readSerialTarget() {
   while (Serial.available() > 0) {
     char inChar = (char)Serial.read();
     
@@ -573,19 +545,19 @@ void readSerialTarget() { //DONE
           Serial.println("Error: Command must contain A, B, C, or D");
         }
         
-        // --- Parse BIGMOTOR (A) ---
+        //PARSING MOTOR A - SHOULDER
         if (aIndex != -1) {
           int rawInputA = inputString.substring(aIndex + 1).toInt();
-          if (rawInputA < 0) rawInputA = 0;
-          if (rawInputA > 180) rawInputA = 180;
+          if (rawInputA < -90) rawInputA = -90;
+          if (rawInputA > 90) rawInputA = 90;
           
-          static int lastRawInputA = 90; //starts at 90 degrees (prone to change, since IK does not start at 90 degrees)
+          static int lastRawInputA = 0;
           static int currentOffsetA = 0; 
           
-          if (lastRawInputA == 90 && rawInputA != 90) { //add the target by a value offset when starting at 90 degrees (prone to change when using AS5600)
-              if (rawInputA < 90) currentOffsetA = OFFSET_DROP_BELOW;
+          if (lastRawInputA == 0 && rawInputA != 0) {
+              if (rawInputA < 0) currentOffsetA = OFFSET_DROP_BELOW;
               else currentOffsetA = OFFSET_DROP_ABOVE;
-          } else if (rawInputA != lastRawInputA) { //anything else besides 90 will not have offset (prone to change when using AS5600)
+          } else if (rawInputA != lastRawInputA) {
               currentOffsetA = 0;
           }
           lastRawInputA = rawInputA;
@@ -595,39 +567,39 @@ void readSerialTarget() { //DONE
           if (compensatedTarget > MAX_COMPENSATED_ANGLE) compensatedTarget = MAX_COMPENSATED_ANGLE;
           
           targetAngleA = compensatedTarget;
-          finalTargetA = targetAngleA * (PPR_A / 360.0); //will be used in the main loop for target position
+          finalTargetA = targetAngleA * (PPR_A / 360.0);
           targetReachedA = false;
         }
         
-        // --- Parse JGA25 (B) ---
+        //PARSING MOTOR B - WAIST
         if (bIndex != -1) {
           targetAngleB = inputString.substring(bIndex + 1).toInt();
-          finalTargetB = targetAngleB * (PPR_B / 360.0); //will be used in the main loop for target position
+          finalTargetB = targetAngleB * (PPR_B / 360.0);
           targetReachedB = false;
         }
 
-        // --- Parse JGA25 (C) ---
+        //PARSING MOTOR C - WRIST
         if (cIndex != -1) {
           int rawInputC = inputString.substring(cIndex + 1).toInt();
-          if (rawInputC < 0) rawInputC = 0;
-          if (rawInputC > 180) rawInputC = 180;
+          if (rawInputC < -90) rawInputC = -90;
+          if (rawInputC > 90) rawInputC = 90;
           
           targetAngleC = rawInputC;
-          finalTargetC = targetAngleC * (PPR_C / 360.0); //will be used in the main loop for target position
+          finalTargetC = targetAngleC * (PPR_C / 360.0);
           targetReachedC = false;
         }
         
-        // --- Parse BIGMOTOR (D) ---
+        //PARSING MOTOR D - ELBOW
         if (dIndex != -1) {
           int rawInputD = inputString.substring(dIndex + 1).toInt();
-          if (rawInputD < 0) rawInputD = 0;
-          if (rawInputD > 180) rawInputD = 180;
+          if (rawInputD < -90) rawInputD = -90;
+          if (rawInputD > 90) rawInputD = 90;
           
-          static int lastRawInputD = 90; 
+          static int lastRawInputD = 0;
           static int currentOffsetD = 0; 
           
-          if (lastRawInputD == 90 && rawInputD != 90) {
-              if (rawInputD < 90) currentOffsetD = OFFSET_DROP_BELOW; //same as Bigmotor A's situation (prone to change when using AS5600)
+          if (lastRawInputD == 0 && rawInputD != 0) {
+              if (rawInputD < 0) currentOffsetD = OFFSET_DROP_BELOW;
               else currentOffsetD = OFFSET_DROP_ABOVE;
           } else if (rawInputD != lastRawInputD) {
               currentOffsetD = 0;
@@ -639,7 +611,7 @@ void readSerialTarget() { //DONE
           if (compensatedTargetD > MAX_COMPENSATED_ANGLE) compensatedTargetD = MAX_COMPENSATED_ANGLE;
           
           targetAngleD = compensatedTargetD;
-          finalTargetD = targetAngleD * (PPR_D / 360.0); //will be used in the main loop for target position
+          finalTargetD = targetAngleD * (PPR_D / 360.0);
           targetReachedD = false;
         }
       }
