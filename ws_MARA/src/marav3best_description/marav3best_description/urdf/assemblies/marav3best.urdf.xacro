@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="marav3best_macro">
+
+  <xacro:macro name="marav3best" params="prefix">
+
+    <!-- Links -->
+    <link name="${prefix}base_link">
+      <inertial>
+        <origin xyz="-0.002348 -0.000935 0.048147" rpy="0 0 0"/>
+        <mass value="1.835799"/>
+        <inertia ixx="9.135036e-03" ixy="-3.556599e-05" ixz="3.306054e-05"
+                 iyy="1.030374e-02" iyz="6.878454e-06" izz="1.158690e-02"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.000000 0.000000 0.000000" rpy="1.570796 0.000000 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/base_link.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.000000 0.000000 0.000000" rpy="1.570796 0.000000 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/base_link.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}RG_shoulder_link">
+      <inertial>
+        <origin xyz="0.001929 0.006923 -0.042870" rpy="0 0 0"/>
+        <mass value="0.515218"/>
+        <inertia ixx="9.696249e-04" ixy="-2.750271e-04" ixz="7.615150e-05"
+                 iyy="2.598872e-03" iyz="7.590550e-05" izz="2.593069e-03"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.050000 0.000000 -0.065500" rpy="-1.570796 0.000000 1.570796"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_shoulder_link.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.050000 0.000000 -0.065500" rpy="-1.570796 0.000000 1.570796"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_shoulder_link.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}RG_shoulder_arm">
+      <inertial>
+        <origin xyz="-0.000448 -0.033726 -0.081688" rpy="0 0 0"/>
+        <mass value="0.739230"/>
+        <inertia ixx="2.803067e-03" ixy="-1.696123e-05" ixz="2.201297e-06"
+                 iyy="1.516943e-03" iyz="1.625498e-04" izz="2.087611e-03"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.000000 0.000000 -0.029000" rpy="0.000000 0.000000 3.128233"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_shoulder_arm.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.000000 0.000000 -0.029000" rpy="0.000000 0.000000 3.128233"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_shoulder_arm.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}RG_elbow_link">
+      <inertial>
+        <origin xyz="-0.000005 -0.028077 -0.045092" rpy="0 0 0"/>
+        <mass value="0.355001"/>
+        <inertia ixx="2.083464e-03" ixy="4.211373e-08" ixz="1.436305e-07"
+                 iyy="1.868716e-03" iyz="-2.559583e-04" izz="4.177623e-04"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_elbow_link.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_elbow_link.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}RG_elbow_arm">
+      <inertial>
+        <origin xyz="-0.000326 0.032091 -0.082902" rpy="0 0 0"/>
+        <mass value="0.689677"/>
+        <inertia ixx="2.714237e-03" ixy="1.361414e-05" ixz="1.786758e-06"
+                 iyy="1.370210e-03" iyz="-1.733726e-04" izz="1.982350e-03"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.000000 0.000000 -0.030000" rpy="0.000000 0.000000 0.010264"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_elbow_arm.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.000000 0.000000 -0.030000" rpy="0.000000 0.000000 0.010264"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_elbow_arm.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}RG_wrist_link">
+      <inertial>
+        <origin xyz="0.000034 -0.020127 -0.043407" rpy="0 0 0"/>
+        <mass value="0.106373"/>
+        <inertia ixx="2.061150e-04" ixy="-1.124648e-07" ixz="2.659564e-07"
+                 iyy="1.486251e-04" iyz="2.823084e-05" izz="1.104264e-04"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_wrist_link.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.000000 0.000000 0.000000" rpy="0.000000 0.000000 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_wrist_link.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}RG_wrist_arm">
+      <inertial>
+        <origin xyz="-0.000906 -0.044882 -0.053216" rpy="0 0 0"/>
+        <mass value="0.516843"/>
+        <inertia ixx="1.631722e-03" ixy="-1.715629e-05" ixz="-5.992788e-06"
+                 iyy="7.710959e-04" iyz="-2.829586e-04" izz="1.214030e-03"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.000000 0.000000 -0.030000" rpy="0.000000 0.000000 3.121628"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_wrist_arm.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.000000 0.000000 -0.030000" rpy="0.000000 0.000000 3.121628"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_wrist_arm.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}RG_gripper_horn">
+      <inertial>
+        <origin xyz="-0.000000 0.000000 0.002693" rpy="0 0 0"/>
+        <mass value="0.015501"/>
+        <inertia ixx="1.755345e-06" ixy="3.956047e-09" ixz="0.000000e+00"
+                 iyy="2.382831e-06" iyz="0.000000e+00" izz="2.273024e-06"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.000000 0.000000 0.018000" rpy="0.000000 0.000000 2.397166"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_gripper_horn.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.000000 0.000000 0.018000" rpy="0.000000 0.000000 2.397166"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/RG_gripper_horn.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}marav3best_gripper_2nd_link">
+      <inertial>
+        <origin xyz="0.014672 -0.000207 -0.000135" rpy="0 0 0"/>
+        <mass value="0.001000"/>
+        <inertia ixx="1.000000e-06" ixy="1.413518e-09" ixz="5.050796e-09"
+                 iyy="1.000000e-06" iyz="-7.128629e-11" izz="1.000000e-06"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.012999 -0.000183 -0.000300" rpy="-0.000000 0.000000 3.127480"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/marav3best_gripper_2nd_link.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.012999 -0.000183 -0.000300" rpy="-0.000000 0.000000 3.127480"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/marav3best_gripper_2nd_link.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}marav3best_gripper_2nd_link_2">
+      <inertial>
+        <origin xyz="-0.014672 0.000207 -0.000135" rpy="0 0 0"/>
+        <mass value="0.001000"/>
+        <inertia ixx="1.000000e-06" ixy="1.413518e-09" ixz="-5.050796e-09"
+                 iyy="1.000000e-06" iyz="7.128629e-11" izz="1.000000e-06"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.012999 0.000183 -0.000300" rpy="0.000000 0.000000 -0.014113"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/marav3best_gripper_2nd_link_2.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.012999 0.000183 -0.000300" rpy="0.000000 0.000000 -0.014113"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/marav3best_gripper_2nd_link_2.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}marav3best_gripper">
+      <inertial>
+        <origin xyz="-0.002946 0.000000 0.034563" rpy="0 0 0"/>
+        <mass value="0.048502"/>
+        <inertia ixx="2.406468e-05" ixy="0.000000e+00" ixz="6.615465e-06"
+                 iyy="2.472685e-05" iyz="0.000000e+00" izz="8.789807e-06"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.019000 -0.016000 -0.006250" rpy="1.570796 -1.570796 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/marav3best_gripper.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="0.019000 -0.016000 -0.006250" rpy="1.570796 -1.570796 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/marav3best_gripper.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}marav3best_gripper_2">
+      <inertial>
+        <origin xyz="0.002946 0.000000 0.034563" rpy="0 0 0"/>
+        <mass value="0.048502"/>
+        <inertia ixx="2.406468e-05" ixy="0.000000e+00" ixz="-6.615465e-06"
+                 iyy="2.472685e-05" iyz="0.000000e+00" izz="8.789807e-06"/>
+      </inertial>
+      <visual>
+        <origin xyz="-0.019000 0.016000 -0.006250" rpy="-1.570796 -1.570796 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/marav3best_gripper_2.dae" scale="1 1 1"/>
+        </geometry>
+        <material name="Generic"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.019000 0.016000 -0.006250" rpy="-1.570796 -1.570796 0.000000"/>
+        <geometry>
+          <mesh filename="package://marav3best_description/meshes/marav3best/marav3best_gripper_2.dae" scale="1 1 1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Joints (internal to assembly) -->
+    <joint name="${prefix}J1_yaw_base_shoulderLink" type="continuous">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}RG_shoulder_link"/>
+      <origin xyz="0.000000 0.000000 0.161500" rpy="-3.141593 0.000000 0.000000"/>
+      <axis xyz="0.000000 0.000000 1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+    </joint>
+
+    <joint name="${prefix}J2_pitch_shoulder" type="continuous">
+      <parent link="${prefix}RG_shoulder_link"/>
+      <child link="${prefix}RG_shoulder_arm"/>
+      <origin xyz="-0.104000 0.000000 -0.065500" rpy="1.570796 0.000000 -1.570796"/>
+      <axis xyz="0.000000 0.000000 -1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+    </joint>
+
+    <joint name="${prefix}J3_rigid_shoulderArm_elbowLink" type="fixed">
+      <parent link="${prefix}RG_shoulder_arm"/>
+      <child link="${prefix}RG_elbow_link"/>
+      <origin xyz="-0.001870 -0.139988 -0.149000" rpy="-3.141593 0.000000 -0.013360"/>
+    </joint>
+
+    <joint name="${prefix}J4_pitch_elbow" type="continuous">
+      <parent link="${prefix}RG_elbow_link"/>
+      <child link="${prefix}RG_elbow_arm"/>
+      <origin xyz="0.000000 0.000000 0.055000" rpy="0.000000 0.000000 -0.013360"/>
+      <axis xyz="0.000000 0.000000 1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+    </joint>
+
+    <joint name="${prefix}J5_rigid_elbowArm_wristLink" type="fixed">
+      <parent link="${prefix}RG_elbow_arm"/>
+      <child link="${prefix}RG_wrist_link"/>
+      <origin xyz="-0.001437 0.139993 -0.150000" rpy="-3.141593 0.000000 -3.131329"/>
+    </joint>
+
+    <joint name="${prefix}J6_pitch_wrist" type="continuous">
+      <parent link="${prefix}RG_wrist_link"/>
+      <child link="${prefix}RG_wrist_arm"/>
+      <origin xyz="0.000000 0.000000 0.030000" rpy="0.000000 0.000000 -3.131329"/>
+      <axis xyz="0.000000 0.000000 -1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+    </joint>
+
+    <joint name="${prefix}J9_horn_drive" type="continuous">
+      <parent link="${prefix}RG_wrist_arm"/>
+      <child link="${prefix}RG_gripper_horn"/>
+      <origin xyz="-0.002376 -0.118976 -0.082000" rpy="-1.550832 1.570796 0.000000"/>
+      <axis xyz="0.000000 0.000000 1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+    </joint>
+
+    <joint name="${prefix}J10_horn_link1" type="continuous">
+      <parent link="${prefix}RG_gripper_horn"/>
+      <child link="${prefix}marav3best_gripper_2nd_link"/>
+      <origin xyz="0.025999 -0.000167 -0.010800" rpy="-3.141593 0.000000 0.000000"/>
+      <axis xyz="0.000000 0.000000 1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+      <mimic joint="${prefix}J9_horn_drive" multiplier="2.0" offset="0.0"/>
+    </joint>
+
+    <joint name="${prefix}J11_horn_link2" type="continuous">
+      <parent link="${prefix}RG_gripper_horn"/>
+      <child link="${prefix}marav3best_gripper_2nd_link_2"/>
+      <origin xyz="-0.025999 0.000167 -0.010800" rpy="-3.141593 0.000000 0.000000"/>
+      <axis xyz="0.000000 0.000000 1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+      <mimic joint="${prefix}J9_horn_drive" multiplier="2.0" offset="0.0"/>
+    </joint>
+
+    <joint name="${prefix}J12_link1_tooth1" type="continuous">
+      <parent link="${prefix}marav3best_gripper_2nd_link"/>
+      <child link="${prefix}marav3best_gripper"/>
+      <origin xyz="0.025997 -0.000367 -0.003550" rpy="0.000000 -0.000000 0.000000"/>
+      <axis xyz="0.000000 0.000000 1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+      <mimic joint="${prefix}J9_horn_drive" multiplier="-1.0" offset="0.0"/>
+    </joint>
+
+    <joint name="${prefix}J13_link2_tooth2" type="continuous">
+      <parent link="${prefix}marav3best_gripper_2nd_link_2"/>
+      <child link="${prefix}marav3best_gripper_2"/>
+      <origin xyz="-0.025997 0.000367 -0.003550" rpy="-0.000000 0.000000 0.000000"/>
+      <axis xyz="0.000000 0.000000 1.000000"/>
+      <limit effort="100.0" velocity="1.00"/>
+      <mimic joint="${prefix}J9_horn_drive" multiplier="-1.0" offset="0.0"/>
+    </joint>
+
+    <!-- ROS 2 control: generated generic system -->
+    <ros2_control name="${prefix}marav3best_system" type="system">
+      <hardware>
+        <plugin>mock_components/GenericSystem</plugin>
+        <param name="cmd_topic">sim/marav3best_system/cmd</param>
+        <param name="state_topic">sim/marav3best_system/state</param>
+        <param name="calculate_dynamics">true</param>
+      </hardware>
+
+      <joint name="${prefix}J1_yaw_base_shoulderLink">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}J2_pitch_shoulder">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}J4_pitch_elbow">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}J6_pitch_wrist">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="${prefix}J9_horn_drive">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>

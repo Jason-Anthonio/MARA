@@ -1,0 +1,2276 @@
+{
+  "cache_version": 1,
+  "config": {
+    "collision_auto_method": "visual_reuse",
+    "collision_format": "stl",
+    "export_collision_mesh": true,
+    "export_visual_mesh": true,
+    "frame_convention": "ros",
+    "frame_overrides_filename": "frame_overrides.csv",
+    "include_debug": true,
+    "include_docs": true,
+    "include_launch": true,
+    "include_readme": true,
+    "include_robot_data_yaml": true,
+    "include_ros2_control": true,
+    "include_rviz": true,
+    "include_screenshot": true,
+    "mesh_refinement": "medium",
+    "output_dir": "D:/marav3best_description",
+    "override_explicit_collision": false,
+    "package_name": "marav3best_description",
+    "robot_prefix": "",
+    "ros2_control_command_interfaces": [
+      "position",
+      "velocity"
+    ],
+    "ros2_control_hardware_plugin": "mock_components/GenericSystem",
+    "ros2_control_update_rate": 100,
+    "use_xacro": false,
+    "verbosity": "verbose",
+    "visual_format": "dae",
+    "zip_name": "",
+    "zip_output": false
+  },
+  "model": {
+    "assemblies": {
+      "16_to_1_planetary_gearbox": {
+        "children_assemblies": [],
+        "depth": 0,
+        "global_offset": [
+          0.05295068344963008,
+          -0.05841055944085081,
+          0.18996195485137657
+        ],
+        "global_rotation": [
+          0.7071067811865455,
+          0.7071067811865497,
+          -1.8523674834736284e-12,
+          -0.7071067811865498,
+          0.7071067811865456,
+          1.5631612760619394e-16,
+          1.3099321410074981e-12,
+          1.3097110766198273e-12,
+          1.0000000000000002
+        ],
+        "joints": [],
+        "links": [],
+        "name": "16_to_1_planetary_gearbox",
+        "parent_assembly": null
+      },
+      "36_to_1_planetary_gearbox": {
+        "children_assemblies": [],
+        "depth": 0,
+        "global_offset": [
+          0.1261010574681057,
+          0.3255685557687922,
+          0.4092333062056754
+        ],
+        "global_rotation": [
+          1.8498729712614164e-12,
+          3.392357597007401e-14,
+          -0.9999999999999997,
+          0.0157073173120418,
+          -0.9998766324816571,
+          -4.452568943912224e-15,
+          -0.9998766324816615,
+          -0.015707317312035833,
+          -1.8492465117353156e-12
+        ],
+        "joints": [],
+        "links": [],
+        "name": "36_to_1_planetary_gearbox",
+        "parent_assembly": null
+      },
+      "6_to_1_planetary_gearbox": {
+        "children_assemblies": [],
+        "depth": 0,
+        "global_offset": [
+          0.0016781054379752013,
+          -0.04714762813421473,
+          0.5141392158023698
+        ],
+        "global_rotation": [
+          -1.8786466315568337e-12,
+          -5.443403163234685e-13,
+          -1.0000000000000016,
+          -0.0538709278775671,
+          0.9985479072781788,
+          -4.4249888944182754e-13,
+          0.9985479072781747,
+          0.05387092787756289,
+          -1.904662037045284e-12
+        ],
+        "joints": [],
+        "links": [],
+        "name": "6_to_1_planetary_gearbox",
+        "parent_assembly": null
+      },
+      "marav3best": {
+        "children_assemblies": [],
+        "depth": 0,
+        "global_offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "global_rotation": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "joints": [
+          "J1_yaw_base_shoulderLink",
+          "J2_pitch_shoulder",
+          "J3_rigid_shoulderArm_elbowLink",
+          "J4_pitch_elbow",
+          "J5_rigid_elbowArm_wristLink",
+          "J6_pitch_wrist",
+          "J7_slider_tooth1",
+          "J8_slider_tooth2",
+          "J9_horn_drive",
+          "J10_horn_link1",
+          "J11_horn_link2",
+          "J12_link1_tooth1",
+          "J13_link2_tooth2"
+        ],
+        "links": [
+          "base_link",
+          "RG_shoulder_link",
+          "RG_elbow_link",
+          "RG_wrist_link",
+          "RG_gripper_horn",
+          "marav3best_gripper_2nd_link",
+          "marav3best_gripper_2nd_link_2",
+          "marav3best_gripper",
+          "marav3best_gripper_2",
+          "RG_wrist_arm",
+          "RG_shoulder_arm",
+          "RG_elbow_arm"
+        ],
+        "name": "marav3best",
+        "parent_assembly": null
+      }
+    },
+    "closing_joints": {
+      "J7_slider_tooth1": {
+        "axis": [
+          4.4270067923916826e-16,
+          -1.0,
+          1.7091653214452627e-16
+        ],
+        "child_link": "marav3best_gripper",
+        "closing_source": "user_tag",
+        "fusion_source": "as_built",
+        "is_closing": true,
+        "is_mount": false,
+        "is_passive": true,
+        "joint_type": "prismatic",
+        "limits": null,
+        "name": "J7_slider_tooth1",
+        "origin_global": [
+          0.08242498036160108,
+          0.0064460473798293606,
+          0.6266727381725965
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          1.5707963267949083,
+          -1.0001105855345779e-14,
+          1.570796326794891
+        ],
+        "origin_xyz": [
+          0.014200000000001121,
+          0.11999999999854567,
+          -0.14249687492385982
+        ],
+        "parent_link": "RG_wrist_arm"
+      },
+      "J8_slider_tooth2": {
+        "axis": [
+          -5.197118294274548e-16,
+          -1.0,
+          -2.513870922591968e-19
+        ],
+        "child_link": "marav3best_gripper_2",
+        "closing_source": "user_tag",
+        "fusion_source": "as_built",
+        "is_closing": true,
+        "is_mount": false,
+        "is_passive": true,
+        "joint_type": "prismatic",
+        "limits": null,
+        "name": "J8_slider_tooth2",
+        "origin_global": [
+          -0.03856876948563525,
+          0.034840387604249255,
+          0.6272396977972948
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          -1.570796326794885,
+          -7.826113335782155e-15,
+          1.5707963267948912
+        ],
+        "origin_xyz": [
+          -0.014199999999998679,
+          0.11999999999854395,
+          -0.021503125076639353
+        ],
+        "parent_link": "RG_wrist_arm"
+      }
+    },
+    "errors": [],
+    "joints": {
+      "J10_horn_link1": {
+        "axis": [
+          -1.4360705007966469e-12,
+          -6.3405843075957925e-12,
+          1.0
+        ],
+        "child_link": "marav3best_gripper_2nd_link",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J10_horn_link1",
+        "origin_global": [
+          0.047927569592810464,
+          0.02061446735508772,
+          0.6367575973319615
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          3.1415926535834244,
+          -1.4415886561737479e-12,
+          0.758539521788048
+        ],
+        "origin_xyz": [
+          -0.019235095397014797,
+          -0.017493173098893623,
+          -0.01079999999998832
+        ],
+        "parent_link": "RG_gripper_horn"
+      },
+      "J11_horn_link2": {
+        "axis": [
+          3.791454997181782e-16,
+          -2.4667767828390023e-15,
+          1.0
+        ],
+        "child_link": "marav3best_gripper_2nd_link_2",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J11_horn_link2",
+        "origin_global": [
+          -0.004071358716763205,
+          0.02028068563429284,
+          0.636750932597308
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          -3.1415926535897696,
+          6.380041894099575e-15,
+          -2.383053131803461
+        ],
+        "origin_xyz": [
+          0.019235095397017156,
+          0.017493173098884724,
+          -0.010799999999986782
+        ],
+        "parent_link": "RG_gripper_horn"
+      },
+      "J12_link1_tooth1": {
+        "axis": [
+          1.0,
+          -1.9757220964870664e-13,
+          -1.2160411566597244e-14
+        ],
+        "child_link": "marav3best_gripper",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J12_link1_tooth1",
+        "origin_global": [
+          0.07392498036158138,
+          0.02031848630542251,
+          0.6332009797624396
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          -1.5566833919092797,
+          -1.5707963267948966,
+          0.0
+        ],
+        "origin_xyz": [
+          -0.025999999999931488,
+          -3.918168415585621e-14,
+          -0.0035500000001948495
+        ],
+        "parent_link": "marav3best_gripper_2nd_link"
+      },
+      "J13_link2_tooth2": {
+        "axis": [
+          1.0,
+          1.72179823860654e-12,
+          6.336785263183418e-12
+        ],
+        "child_link": "marav3best_gripper_2",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J13_link2_tooth2",
+        "origin_global": [
+          -0.030068769485638986,
+          0.02071840659021985,
+          0.633208965109073
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          -1.556683391911002,
+          -1.5707963267948966,
+          0.0
+        ],
+        "origin_xyz": [
+          -0.025999999999964045,
+          -2.0203822881197098e-14,
+          -0.0035500000014789
+        ],
+        "parent_link": "marav3best_gripper_2nd_link_2"
+      },
+      "J1_yaw_base_shoulderLink": {
+        "axis": [
+          1.25598486730975e-15,
+          -1.0,
+          -1.7112072715556205e-16
+        ],
+        "child_link": "RG_shoulder_link",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J1_yaw_base_shoulderLink",
+        "origin_global": [
+          0.019928105438590717,
+          0.026346016593700693,
+          0.16150000000000045
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          2.9246444659939486,
+          -1.5707962730679959,
+          -2.389097004612617
+        ],
+        "origin_xyz": [
+          -2.9962837766461803e-13,
+          0.16150000000000048,
+          -3.82804898891109e-16
+        ],
+        "parent_link": "base_link"
+      },
+      "J2_pitch_shoulder": {
+        "axis": [
+          -2.6532364758302395e-14,
+          -3.560175312728624e-14,
+          1.0
+        ],
+        "child_link": "RG_shoulder_arm",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J2_pitch_shoulder",
+        "origin_global": [
+          -0.08407189456153719,
+          0.026346016593706622,
+          0.22699999999980786
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          -3.414065974961053e-14,
+          2.722036496685018e-14,
+          -0.013359612482877764
+        ],
+        "origin_xyz": [
+          -6.109412106710327e-15,
+          0.06550000000000032,
+          0.10400000000000616
+        ],
+        "parent_link": "RG_shoulder_link"
+      },
+      "J3_rigid_shoulderArm_elbowLink": {
+        "axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "child_link": "RG_elbow_link",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "fixed",
+        "limits": null,
+        "name": "J3_rigid_shoulderArm_elbowLink",
+        "origin_global": [
+          0.06492810543821972,
+          0.024475726481937566,
+          0.36698750663871643
+        ],
+        "origin_method": "child_minus_parent",
+        "origin_rpy": [
+          3.1415926535897634,
+          -2.41652120857674e-13,
+          3.1415926535894783
+        ],
+        "origin_xyz": [
+          -1.0456913113188193e-14,
+          0.1400000000000183,
+          -0.1490000000000107
+        ],
+        "parent_link": "RG_shoulder_arm"
+      },
+      "J4_pitch_elbow": {
+        "axis": [
+          -7.156396404846314e-14,
+          -3.661988070022426e-14,
+          1.0
+        ],
+        "child_link": "RG_elbow_arm",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J4_pitch_elbow",
+        "origin_global": [
+          0.11992810543821684,
+          0.024475726481892605,
+          0.3669875066388189
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          -3.128889230451601e-14,
+          7.50170779740179e-14,
+          -0.003095825556548048
+        ],
+        "origin_xyz": [
+          -5.962559820237226e-14,
+          1.6773978219969702e-15,
+          0.05499999999999692
+        ],
+        "parent_link": "RG_elbow_link"
+      },
+      "J5_rigid_elbowArm_wristLink": {
+        "axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "child_link": "RG_wrist_link",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "fixed",
+        "limits": null,
+        "name": "J5_rigid_elbowArm_wristLink",
+        "origin_global": [
+          -0.030071894562042803,
+          0.0230388215409533,
+          0.5069801325307328
+        ],
+        "origin_method": "child_minus_parent",
+        "origin_rpy": [
+          3.141592653589761,
+          -1.3161703459496358e-13,
+          -3.14159265358977
+        ],
+        "origin_xyz": [
+          -2.1543097167286973e-15,
+          0.1400000000000053,
+          -0.14999999999999727
+        ],
+        "parent_link": "RG_elbow_arm"
+      },
+      "J6_pitch_wrist": {
+        "axis": [
+          9.13813343974198e-16,
+          -9.394209197291415e-17,
+          1.0
+        ],
+        "child_link": "RG_wrist_arm",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J6_pitch_wrist",
+        "origin_global": [
+          -0.06007189456204287,
+          0.02303882154095571,
+          0.5069801325306846
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          2.459808924037857e-14,
+          4.83577414351856e-14,
+          -0.009700906406245626
+        ],
+        "origin_xyz": [
+          -1.6656411149173765e-14,
+          7.123373662889333e-15,
+          0.030000000000000047
+        ],
+        "parent_link": "RG_wrist_link"
+      },
+      "J9_horn_drive": {
+        "axis": [
+          4.6837533851373335e-17,
+          8.2364670639378e-15,
+          1.0
+        ],
+        "child_link": "RG_gripper_horn",
+        "closing_source": "",
+        "fusion_source": "as_built",
+        "is_closing": false,
+        "is_mount": false,
+        "is_passive": false,
+        "joint_type": "continuous",
+        "limits": null,
+        "name": "J9_horn_drive",
+        "origin_global": [
+          0.021928105437904313,
+          0.020663180859103288,
+          0.6259564172736465
+        ],
+        "origin_method": "joint_minus_parent",
+        "origin_rpy": [
+          1.5707963267761367,
+          -0.8263697398924519,
+          1.3772602173583348e-11
+        ],
+        "origin_xyz": [
+          -4.45260148196347e-15,
+          0.11899999999937536,
+          -0.0820000000001691
+        ],
+        "parent_link": "RG_wrist_arm"
+      }
+    },
+    "links": {
+      "RG_elbow_arm": {
+        "area_m2": 0.3996031338599455,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.06573405922605459,
+          0.18900000000001438,
+          0.028999999999998933
+        ],
+        "bbox_min": [
+          -0.06573405922595485,
+          -0.06573405922601891,
+          -0.13349999999999532
+        ],
+        "bbox_size": [
+          0.13146811845200945,
+          0.2547340592260333,
+          0.16249999999999426
+        ],
+        "body_count": 1,
+        "clean_name": "Structural_arm_2_ver_5",
+        "collision": {
+          "mesh_path": "meshes/marav3best/RG_elbow_arm.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.06573405922605459,
+          0.18900000000001438,
+          0.028999999999998933
+        ],
+        "collision_bbox_min": [
+          -0.06573405922595485,
+          -0.06573405922601891,
+          -0.13349999999999532
+        ],
+        "collision_bbox_size": [
+          0.13146811845200945,
+          0.2547340592260333,
+          0.16249999999999426
+        ],
+        "collision_body_count": 46,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 0.0006896772029722773,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          3.408441103088115e-06,
+          0.03209275520560835,
+          -0.052902135609081954
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          0.08992810543821657,
+          0.024475726481884803,
+          0.36698750663876417
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 0.0027143745497879316,
+          "ixy": -1.8256059298172063e-07,
+          "ixz": 7.235663740053463e-09,
+          "iyy": 0.0013700722534011067,
+          "iyz": -0.00017338183900185398,
+          "izz": 0.001982350215841215
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": true,
+        "mass_kg": 0.6896772029722771,
+        "material_name": "Generic",
+        "merged_member_paths": [
+          "36 to 1 planetary gearbox:2+Carrier 6 to 1:2",
+          "36 to 1 planetary gearbox:2+ring 6 to 1 z60 m1.25:2",
+          "36 to 1 planetary gearbox:2+planet 6 to 1 z24 m1.25:4",
+          "36 to 1 planetary gearbox:2+605 zz (5x14x5):10",
+          "36 to 1 planetary gearbox:2+spacer:7",
+          "36 to 1 planetary gearbox:2+spacer:8",
+          "36 to 1 planetary gearbox:2+planet 6 to 1 z24 m1.25:5",
+          "36 to 1 planetary gearbox:2+605 zz (5x14x5):11",
+          "36 to 1 planetary gearbox:2+spacer:9",
+          "36 to 1 planetary gearbox:2+spacer:10",
+          "36 to 1 planetary gearbox:2+planet 6 to 1 z24 m1.25:6",
+          "36 to 1 planetary gearbox:2+605 zz (5x14x5):12",
+          "36 to 1 planetary gearbox:2+spacer:11",
+          "36 to 1 planetary gearbox:2+spacer:12",
+          "36 to 1 planetary gearbox:2+sun 6 to 1 z12 m1.25:1",
+          "36 to 1 planetary gearbox:2+6802 zz (15x24x5):3",
+          "36 to 1 planetary gearbox:2+6800 zz (10x19x5):4",
+          "36 to 1 planetary gearbox:2+Shaft cover:2",
+          "36 to 1 planetary gearbox:2+Back cover:2",
+          "36 to 1 planetary gearbox:2+Carrier 6 to 1:3",
+          "36 to 1 planetary gearbox:2+ring 6 to 1 z60 m1.25:3",
+          "36 to 1 planetary gearbox:2+planet 6 to 1 z24 m1.25:7",
+          "36 to 1 planetary gearbox:2+605 zz (5x14x5):13",
+          "36 to 1 planetary gearbox:2+spacer:13",
+          "36 to 1 planetary gearbox:2+spacer:14",
+          "36 to 1 planetary gearbox:2+planet 6 to 1 z24 m1.25:8",
+          "36 to 1 planetary gearbox:2+605 zz (5x14x5):14",
+          "36 to 1 planetary gearbox:2+spacer:15",
+          "36 to 1 planetary gearbox:2+spacer:16",
+          "36 to 1 planetary gearbox:2+planet 6 to 1 z24 m1.25:9",
+          "36 to 1 planetary gearbox:2+605 zz (5x14x5):15",
+          "36 to 1 planetary gearbox:2+spacer:17",
+          "36 to 1 planetary gearbox:2+spacer:18",
+          "36 to 1 planetary gearbox:2+Output shaft - 18mm between screw holes:1",
+          "36 to 1 planetary gearbox:2+6800 zz (10x19x5):5",
+          "36 to 1 planetary gearbox:2+6807 zz (35x47x7):3",
+          "36 to 1 planetary gearbox:2+Shaft cover:3",
+          "36 to 1 planetary gearbox:2+Back cover:3",
+          "36 to 1 planetary gearbox:2+sun 6 to 1 z12 m1.25 - multi stage input revised:1",
+          "36 to 1 planetary gearbox:2+6807 zz (35x47x7):4",
+          "Structural arm 2 ver 5:1",
+          "arm 2 cover part 1:1",
+          "arm 2 cover part 2:1",
+          "arm 2 cover part 3a:1",
+          "arm 2 cover part 3b:1",
+          "6807 zz (35x47x7):6"
+        ],
+        "mesh_bake_offset": [
+          2.4322938651242393e-15,
+          1.6170325842701211e-15,
+          -0.03000000000000032
+        ],
+        "mesh_collision": "meshes/marav3best/RG_elbow_arm_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/RG_elbow_arm.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "Structural arm 2 ver 5:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": "RG_elbow_arm",
+        "source_world_rotation": [
+          -3.598812423420605e-13,
+          -1.875602000319902e-12,
+          1.0000000000000016,
+          0.9999473278013687,
+          -0.010263606720612547,
+          3.405478698798395e-13,
+          0.010263606720614387,
+          0.9999473278013632,
+          1.8800119895077076e-12
+        ],
+        "urdf_name": "RG_elbow_arm",
+        "volume_m3": 0.0006896772029722773,
+        "wants_accurate_collision": false
+      },
+      "RG_elbow_link": {
+        "area_m2": 0.08270644577930422,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.03999999999999456,
+          0.040000000000040434,
+          0.05499999999999731
+        ],
+        "bbox_min": [
+          -0.04000000000009847,
+          -0.0997000000000015,
+          -0.1460000000000256
+        ],
+        "bbox_size": [
+          0.08000000000009302,
+          0.13970000000004193,
+          0.2010000000000229
+        ],
+        "body_count": 1,
+        "clean_name": "3rd_joint_PGB_bracket",
+        "collision": {
+          "mesh_path": "meshes/marav3best/RG_elbow_link.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.03999999999999456,
+          0.040000000000040434,
+          0.05499999999999731
+        ],
+        "collision_bbox_min": [
+          -0.04000000000009847,
+          -0.0997000000000015,
+          -0.1460000000000256
+        ],
+        "collision_bbox_size": [
+          0.08000000000009302,
+          0.13970000000004193,
+          0.2010000000000229
+        ],
+        "collision_body_count": 5,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 0.00035500064384234083,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          -4.590852742224469e-06,
+          -0.028076918559409712,
+          -0.045091702687503496
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          0.06492810543821972,
+          0.024475726481937566,
+          0.36698750663871643
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 0.0020834635114954426,
+          "ixy": 4.211372989272205e-08,
+          "ixz": 1.4363051462006622e-07,
+          "iyy": 0.0018687157318840928,
+          "iyz": -0.0002559583299597001,
+          "izz": 0.00041776229478056103
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": true,
+        "mass_kg": 0.3550006438423408,
+        "material_name": "Generic",
+        "merged_member_paths": [
+          "3rd joint PGB bracket:1",
+          "5840 - 31ZY worm geared DC motor bracket - 3rd joint:1",
+          "5840 - 31ZY worm geared DC motor (4058GW31ZY):2",
+          "KY040 rotary encoder bracket (enclosed):2",
+          "KY040 rotary encoder:2"
+        ],
+        "mesh_bake_offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_collision": "meshes/marav3best/RG_elbow_link_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/RG_elbow_link.dae",
+        "needs_mesh_bake": false,
+        "occurrence_path": "3rd joint PGB bracket:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": "RG_elbow_link",
+        "source_world_rotation": [
+          -2.9160025492406844e-13,
+          -1.8434123748170544e-12,
+          0.9999999999999963,
+          0.9999107617044284,
+          -0.013359215084489694,
+          2.659198555358452e-13,
+          0.013359215084484108,
+          0.9999107617044287,
+          1.8471396977408708e-12
+        ],
+        "urdf_name": "RG_elbow_link",
+        "volume_m3": 0.00035500064384234083,
+        "wants_accurate_collision": false
+      },
+      "RG_gripper_horn": {
+        "area_m2": 0.009577795626826716,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.03281725645229373,
+          0.027337188165542408,
+          1.2565903179106996e-16
+        ],
+        "bbox_min": [
+          -0.03281725645229147,
+          -0.027337188165552008,
+          -0.030999999999989127
+        ],
+        "bbox_size": [
+          0.0656345129045852,
+          0.05467437633109441,
+          0.03099999999998925
+        ],
+        "body_count": 1,
+        "clean_name": "Gear_2_to_1",
+        "collision": {
+          "mesh_path": "meshes/marav3best/RG_gripper_horn.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.03281725645229373,
+          0.027337188165542408,
+          1.2565903179106996e-16
+        ],
+        "collision_bbox_min": [
+          -0.03281725645229147,
+          -0.027337188165552008,
+          -0.030999999999989127
+        ],
+        "collision_bbox_size": [
+          0.0656345129045852,
+          0.05467437633109441,
+          0.03099999999998925
+        ],
+        "collision_body_count": 2,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 1.5501191773253283e-05,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          1.3345824647875134e-08,
+          -2.7550134674469653e-09,
+          -0.015306550214445647
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          0.021928105437709094,
+          0.02102252146645186,
+          0.607960004455312
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 2.03946485512543e-06,
+          "ixy": -3.123665451516337e-07,
+          "ixz": -7.874585586465698e-13,
+          "iyy": 2.098711074912603e-06,
+          "iyz": 1.6252283701900368e-13,
+          "izz": 2.2730237132429265e-06
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": true,
+        "mass_kg": 0.015501191773253282,
+        "material_name": "Generic",
+        "merged_member_paths": [
+          "Gear (2 to 1):1",
+          "gripper 1st link:1"
+        ],
+        "mesh_bake_offset": [
+          8.131516293641283e-20,
+          1.481020167615199e-16,
+          0.018000000000000235
+        ],
+        "mesh_collision": "meshes/marav3best/RG_gripper_horn_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/RG_gripper_horn.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "Gear (2 to 1):1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": "RG_gripper_horn",
+        "source_world_rotation": [
+          -0.735476539426152,
+          -0.67755018998871,
+          -1.0845363235950645e-11,
+          -0.6774151624544658,
+          0.7353299678728099,
+          0.019963367074920517,
+          -0.013526183146451454,
+          0.014682588138895347,
+          -0.9998007121296937
+        ],
+        "urdf_name": "RG_gripper_horn",
+        "volume_m3": 1.5501191773253283e-05,
+        "wants_accurate_collision": false
+      },
+      "RG_shoulder_arm": {
+        "area_m2": 0.39649753298904233,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.06613180667485417,
+          0.18900000000001208,
+          0.02899999999999808
+        ],
+        "bbox_min": [
+          -0.06613180667483179,
+          -0.0661318066748537,
+          -0.13349999999999984
+        ],
+        "bbox_size": [
+          0.13226361334968595,
+          0.2551318066748658,
+          0.16249999999999792
+        ],
+        "body_count": 1,
+        "clean_name": "Structural_arm_1_ver_8",
+        "collision": {
+          "mesh_path": "meshes/marav3best/RG_shoulder_arm.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.06613180667485417,
+          0.18900000000001208,
+          0.02899999999999808
+        ],
+        "collision_bbox_min": [
+          -0.06613180667483179,
+          -0.0661318066748537,
+          -0.13349999999999984
+        ],
+        "collision_bbox_size": [
+          0.13226361334968595,
+          0.2551318066748658,
+          0.16249999999999792
+        ],
+        "collision_body_count": 46,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 0.0007392299500187302,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          -2.933799686495816e-06,
+          0.033728767250261124,
+          -0.05268840951763782
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          -0.05507189456153709,
+          0.026346016593706344,
+          0.22699999999986153
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 0.0028032904238291384,
+          "ixy": 2.2490084656714693e-07,
+          "ixz": -2.9563067021429735e-08,
+          "iyy": 0.0015167189840177744,
+          "iyz": -0.00016256471246501786,
+          "izz": 0.002087610868560819
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": true,
+        "mass_kg": 0.7392299500187304,
+        "material_name": "Generic",
+        "merged_member_paths": [
+          "36 to 1 planetary gearbox:1+Carrier 6 to 1:2",
+          "36 to 1 planetary gearbox:1+ring 6 to 1 z60 m1.25:2",
+          "36 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:4",
+          "36 to 1 planetary gearbox:1+605 zz (5x14x5):10",
+          "36 to 1 planetary gearbox:1+spacer:7",
+          "36 to 1 planetary gearbox:1+spacer:8",
+          "36 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:5",
+          "36 to 1 planetary gearbox:1+605 zz (5x14x5):11",
+          "36 to 1 planetary gearbox:1+spacer:9",
+          "36 to 1 planetary gearbox:1+spacer:10",
+          "36 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:6",
+          "36 to 1 planetary gearbox:1+605 zz (5x14x5):12",
+          "36 to 1 planetary gearbox:1+spacer:11",
+          "36 to 1 planetary gearbox:1+spacer:12",
+          "36 to 1 planetary gearbox:1+sun 6 to 1 z12 m1.25:1",
+          "36 to 1 planetary gearbox:1+6802 zz (15x24x5):3",
+          "36 to 1 planetary gearbox:1+6800 zz (10x19x5):4",
+          "36 to 1 planetary gearbox:1+Shaft cover:2",
+          "36 to 1 planetary gearbox:1+Back cover:2",
+          "36 to 1 planetary gearbox:1+Carrier 6 to 1:3",
+          "36 to 1 planetary gearbox:1+ring 6 to 1 z60 m1.25:3",
+          "36 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:7",
+          "36 to 1 planetary gearbox:1+605 zz (5x14x5):13",
+          "36 to 1 planetary gearbox:1+spacer:13",
+          "36 to 1 planetary gearbox:1+spacer:14",
+          "36 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:8",
+          "36 to 1 planetary gearbox:1+605 zz (5x14x5):14",
+          "36 to 1 planetary gearbox:1+spacer:15",
+          "36 to 1 planetary gearbox:1+spacer:16",
+          "36 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:9",
+          "36 to 1 planetary gearbox:1+605 zz (5x14x5):15",
+          "36 to 1 planetary gearbox:1+spacer:17",
+          "36 to 1 planetary gearbox:1+spacer:18",
+          "36 to 1 planetary gearbox:1+Output shaft - 18mm between screw holes:1",
+          "36 to 1 planetary gearbox:1+6800 zz (10x19x5):5",
+          "36 to 1 planetary gearbox:1+6807 zz (35x47x7):3",
+          "36 to 1 planetary gearbox:1+Shaft cover:3",
+          "36 to 1 planetary gearbox:1+Back cover:3",
+          "36 to 1 planetary gearbox:1+sun 6 to 1 z12 m1.25 - multi stage input revised:1",
+          "36 to 1 planetary gearbox:1+6807 zz (35x47x7):4",
+          "Structural arm 1 ver 8:1",
+          "arm 1 cover ver 3 - part 1:1",
+          "arm 1 cover ver 3 - part 2:1",
+          "arm 1 cover ver 3 - part 3a:1",
+          "arm 1 cover ver 3 - part 3b:1",
+          "6807 zz (35x47x7):5"
+        ],
+        "mesh_bake_offset": [
+          1.012483738765899e-15,
+          1.0786362032925725e-15,
+          -0.029000000000000085
+        ],
+        "mesh_collision": "meshes/marav3best/RG_shoulder_arm_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/RG_shoulder_arm.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "Structural arm 1 ver 8:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": "RG_shoulder_arm",
+        "source_world_rotation": [
+          5.007123591681247e-14,
+          -1.813778093677046e-12,
+          -0.9999999999999997,
+          -0.9999107617044325,
+          -0.01335921508416927,
+          -2.571728110441264e-14,
+          -0.013359215084165217,
+          0.9999107617044343,
+          -1.8139649504153484e-12
+        ],
+        "urdf_name": "RG_shoulder_arm",
+        "volume_m3": 0.0007392299500187302,
+        "wants_accurate_collision": false
+      },
+      "RG_shoulder_link": {
+        "area_m2": 0.22710178508022297,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.09969999999999778,
+          0.049000000000000245,
+          0.053999999999997925
+        ],
+        "bbox_min": [
+          -0.08379215357060706,
+          -0.06800000000000023,
+          -0.16020000000002063
+        ],
+        "bbox_size": [
+          0.18349215357060483,
+          0.11700000000000046,
+          0.21420000000001854
+        ],
+        "body_count": 1,
+        "clean_name": "2nd_joint_PGB_bracket",
+        "collision": {
+          "mesh_path": "meshes/marav3best/RG_shoulder_link.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.09969999999999778,
+          0.049000000000000245,
+          0.053999999999997925
+        ],
+        "collision_bbox_min": [
+          -0.08379215357060706,
+          -0.06800000000000023,
+          -0.16020000000002063
+        ],
+        "collision_bbox_size": [
+          0.18349215357060483,
+          0.11700000000000046,
+          0.21420000000001854
+        ],
+        "collision_body_count": 10,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 0.0005152184983680344,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          0.006922570225129867,
+          -0.022629585492267543,
+          -0.051929404080048404
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          -0.030071894561539164,
+          0.026346016593699107,
+          0.22699999999990794
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 0.0025988720451721424,
+          "ixy": -7.59054974378454e-05,
+          "ixz": 0.0002750270914449769,
+          "iyy": 0.0025930689930232917,
+          "iyz": 7.615150445076223e-05,
+          "izz": 0.0009696248935211246
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": true,
+        "mass_kg": 0.5152184983680342,
+        "material_name": "Generic",
+        "merged_member_paths": [
+          "2nd joint mount ver 2:1",
+          "1st arm - base joint cover - part 1:1",
+          "1st arm - base joint cover - part 2:1",
+          "1st arm - base joint cover - part 3a:1",
+          "1st arm - base joint cover - part 3b:1",
+          "2nd joint PGB bracket:1",
+          "5840 - 31ZY worm geared DC motor bracket:1",
+          "5840 - 31ZY worm geared DC motor (4058GW31ZY):1",
+          "KY040 rotary encoder bracket (enclosed):1",
+          "KY040 rotary encoder:1"
+        ],
+        "mesh_bake_offset": [
+          1.48827919482057e-15,
+          0.06550000000000013,
+          0.050000000000008656
+        ],
+        "mesh_collision": "meshes/marav3best/RG_shoulder_link_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/RG_shoulder_link.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "2nd joint PGB bracket:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": "RG_shoulder_link",
+        "source_world_rotation": [
+          -8.909034727405151e-16,
+          -1.848633388746672e-12,
+          -0.9999999999999964,
+          -0.9999999999999983,
+          -8.881784196916422e-16,
+          1.8379123079027284e-15,
+          -2.1649348986194e-15,
+          1.000000000000003,
+          -1.8480591180066185e-12
+        ],
+        "urdf_name": "RG_shoulder_link",
+        "volume_m3": 0.0005152184983680344,
+        "wants_accurate_collision": false
+      },
+      "RG_wrist_arm": {
+        "area_m2": 0.19405555475689495,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.04856745787442582,
+          0.11989999999854549,
+          0.030000000000000006
+        ],
+        "bbox_min": [
+          -0.04856745787437967,
+          -0.04856745787439378,
+          -0.10600000000000122
+        ],
+        "bbox_size": [
+          0.09713491574880548,
+          0.16846745787293926,
+          0.13600000000000123
+        ],
+        "body_count": 1,
+        "clean_name": "Structural_arm_3_ver_2",
+        "collision": {
+          "mesh_path": "meshes/marav3best/RG_wrist_arm.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.04856745787442582,
+          0.11989999999854549,
+          0.030000000000000006
+        ],
+        "collision_bbox_min": [
+          -0.04856745787437967,
+          -0.04856745787439378,
+          -0.10600000000000122
+        ],
+        "collision_bbox_size": [
+          0.09713491574880548,
+          0.16846745787293926,
+          0.13600000000000123
+        ],
+        "collision_body_count": 27,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 0.0005168431545242049,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          9.833021787707752e-06,
+          0.04489135061859297,
+          -0.02321592805279613
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          -0.03007189456204288,
+          0.023038821540971307,
+          0.5069801325307409
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 0.0016320638868686185,
+          "ixy": 3.495103807895038e-08,
+          "ixz": 3.4278838033413275e-07,
+          "iyy": 0.0007707540475844427,
+          "iyz": 0.00028302180347185903,
+          "izz": 0.0012140300802691098
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": true,
+        "mass_kg": 0.5168431545242049,
+        "material_name": "Generic",
+        "merged_member_paths": [
+          "6 to 1 planetary gearbox:1+ring 6 to 1 z60 m1.25:1",
+          "6 to 1 planetary gearbox:1+sun 6 to 1 z12 m1.25 (short shaft for JGA):1",
+          "6 to 1 planetary gearbox:1+Carrier 6 to 1:1",
+          "6 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:1",
+          "6 to 1 planetary gearbox:1+spacer:1",
+          "6 to 1 planetary gearbox:1+spacer:2",
+          "6 to 1 planetary gearbox:1+605 zz (5x14x5):7",
+          "6 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:2",
+          "6 to 1 planetary gearbox:1+spacer:3",
+          "6 to 1 planetary gearbox:1+spacer:4",
+          "6 to 1 planetary gearbox:1+605 zz (5x14x5):8",
+          "6 to 1 planetary gearbox:1+planet 6 to 1 z24 m1.25:3",
+          "6 to 1 planetary gearbox:1+spacer:5",
+          "6 to 1 planetary gearbox:1+spacer:6",
+          "6 to 1 planetary gearbox:1+605 zz (5x14x5):9",
+          "6 to 1 planetary gearbox:1+Output shaft:1",
+          "6 to 1 planetary gearbox:1+Shaft cover:1",
+          "6 to 1 planetary gearbox:1+Back cover:1",
+          "6 to 1 planetary gearbox:1+6800 zz (10x19x5):3",
+          "6 to 1 planetary gearbox:1+6802 zz (15x24x5):2",
+          "6 to 1 planetary gearbox:1+6807 zz (35x47x7):2",
+          "Structural arm 3 ver 2:1",
+          "gripper railing (2 camera):1",
+          "Pinion:1",
+          "JGA 25-370 motor:3",
+          "6807 zz (35x47x7):7",
+          "605 zz (5x14x5):16"
+        ],
+        "mesh_bake_offset": [
+          -1.611138271480912e-17,
+          8.472107647285787e-18,
+          -0.029999999999999978
+        ],
+        "mesh_collision": "meshes/marav3best/RG_wrist_arm_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/RG_wrist_arm.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "Structural arm 3 ver 2:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": "RG_wrist_arm",
+        "source_world_rotation": [
+          5.567705878813956e-13,
+          -1.865240547253548e-12,
+          -0.9999999999999996,
+          -0.999800712129698,
+          -0.01996336707489571,
+          -5.202423986141225e-13,
+          -0.01996336707489027,
+          0.9998007121296935,
+          -1.8761695916144693e-12
+        ],
+        "urdf_name": "RG_wrist_arm",
+        "volume_m3": 0.0005168431545242049,
+        "wants_accurate_collision": false
+      },
+      "RG_wrist_link": {
+        "area_m2": 0.03726471173375023,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.056568542494926224,
+          0.05656854249492312,
+          1.0594377939669852e-16
+        ],
+        "bbox_min": [
+          -0.056568542494923484,
+          -0.0590000000000006,
+          -0.11990000000000076
+        ],
+        "bbox_size": [
+          0.1131370849898497,
+          0.11556854249492372,
+          0.11990000000000087
+        ],
+        "body_count": 1,
+        "clean_name": "4th_joint_PGB_bracket",
+        "collision": {
+          "mesh_path": "meshes/marav3best/RG_wrist_link.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.056568542494926224,
+          0.05656854249492312,
+          1.0594377939669852e-16
+        ],
+        "collision_bbox_min": [
+          -0.056568542494923484,
+          -0.0590000000000006,
+          -0.11990000000000076
+        ],
+        "collision_bbox_size": [
+          0.1131370849898497,
+          0.11556854249492372,
+          0.11990000000000087
+        ],
+        "collision_body_count": 3,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 0.00010637264679851234,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          3.386288459902639e-05,
+          -0.020126934522991132,
+          -0.04340660747180157
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          -0.030071894562042803,
+          0.0230388215409533,
+          0.5069801325307328
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 0.00020611497081933142,
+          "ixy": -1.1246484612400458e-07,
+          "ixz": 2.6595640609259814e-07,
+          "iyy": 0.00014862510637214847,
+          "iyz": 2.8230836672065152e-05,
+          "izz": 0.00011042641435101913
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": true,
+        "mass_kg": 0.10637264679851235,
+        "material_name": "Generic",
+        "merged_member_paths": [
+          "4th joint PGB bracket:1",
+          "JGA 25-370 bracket:1",
+          "JGA 25-370 motor:2"
+        ],
+        "mesh_bake_offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_collision": "meshes/marav3best/RG_wrist_link_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/RG_wrist_link.dae",
+        "needs_mesh_bake": false,
+        "occurrence_path": "4th joint PGB bracket:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": "RG_wrist_link",
+        "source_world_rotation": [
+          4.914426707601449e-13,
+          -1.8443075888132777e-12,
+          -0.9999999999999993,
+          -0.9999473278013712,
+          -0.010263606720630033,
+          -4.715661048898532e-13,
+          -0.01026360672063601,
+          0.999947327801365,
+          -1.8504252725768963e-12
+        ],
+        "urdf_name": "RG_wrist_link",
+        "volume_m3": 0.00010637264679851234,
+        "wants_accurate_collision": false
+      },
+      "base_link": {
+        "area_m2": 0.8051925554842637,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.11861575314702877,
+          0.1620000000001158,
+          0.11861575314702881
+        ],
+        "bbox_min": [
+          -0.11861575314702877,
+          -9.483566170248394e-18,
+          -0.11861575314702882
+        ],
+        "bbox_size": [
+          0.23723150629405754,
+          0.1620000000001158,
+          0.23723150629405765
+        ],
+        "body_count": 1,
+        "clean_name": "Base_plate_ver_2",
+        "collision": {
+          "mesh_path": "meshes/marav3best/base_link.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.11861575314702877,
+          0.1620000000001158,
+          0.11861575314702881
+        ],
+        "collision_bbox_min": [
+          -0.11861575314702877,
+          -9.483566170248394e-18,
+          -0.11861575314702882
+        ],
+        "collision_bbox_size": [
+          0.23723150629405754,
+          0.1620000000001158,
+          0.23723150629405765
+        ],
+        "collision_body_count": 52,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 0.0018152266897223737,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          -0.002348312981523689,
+          0.048147016517464836,
+          0.0009352771223357883
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          0.019928105438890346,
+          0.026346016593700346,
+          5.8499908458965116e-18
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 0.009135036012883744,
+          "ixy": 3.306054086646834e-05,
+          "ixz": 3.556598823687252e-05,
+          "iyy": 0.011586897399426959,
+          "iyz": -6.8784538144207414e-06,
+          "izz": 0.010303736515893318
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": true,
+        "mass_kg": 1.8357986418940406,
+        "material_name": "Generic",
+        "merged_member_paths": [
+          "Base housing ver 6:1",
+          "Base plate ver 2:1",
+          "Controller rack:1",
+          "LiPo battery pack bracket:1",
+          "LiPo battery pack:1",
+          "Powerbank bracket:1",
+          "Powerbank:1",
+          "back plate type 2:1",
+          "JGA 25-370 motor:1",
+          "1st joint motor mount:1",
+          "16 to 1 planetary gearbox:1+ring gear (16 to 1, z45) type 2 ver 1:1",
+          "16 to 1 planetary gearbox:1+Carrier - backhalf:1",
+          "16 to 1 planetary gearbox:1+planet gear (16 to 1, z15):1",
+          "16 to 1 planetary gearbox:1+605 zz (5x14x5):1",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):1",
+          "16 to 1 planetary gearbox:1+sun gear (16 to 1, z15) type 2 ver 1:1",
+          "16 to 1 planetary gearbox:1+sun gear stage 2 (16 to 1, z15):1",
+          "16 to 1 planetary gearbox:1+(Purchased) JF-M5-25:1",
+          "16 to 1 planetary gearbox:1+Output shaft type 2:1",
+          "16 to 1 planetary gearbox:1+Front cap type 2:1",
+          "16 to 1 planetary gearbox:1+6807 zz (35x47x7):1",
+          "16 to 1 planetary gearbox:1+6800 zz (10x19x5):1",
+          "16 to 1 planetary gearbox:1+6802 zz (15x24x5):1",
+          "16 to 1 planetary gearbox:1+Back cap type 2:1",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):2",
+          "16 to 1 planetary gearbox:1+planet gear (16 to 1, z15):2",
+          "16 to 1 planetary gearbox:1+605 zz (5x14x5):2",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):3",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):4",
+          "16 to 1 planetary gearbox:1+planet gear (16 to 1, z15):3",
+          "16 to 1 planetary gearbox:1+605 zz (5x14x5):3",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):5",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):6",
+          "16 to 1 planetary gearbox:1+(Purchased) JF-M5-25:2",
+          "16 to 1 planetary gearbox:1+(Purchased) JF-M5-25:3",
+          "16 to 1 planetary gearbox:1+Carrier - backhalf:2",
+          "16 to 1 planetary gearbox:1+605 zz (5x14x5):4",
+          "16 to 1 planetary gearbox:1+planet gear (16 to 1, z15):4",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):7",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):8",
+          "16 to 1 planetary gearbox:1+605 zz (5x14x5):5",
+          "16 to 1 planetary gearbox:1+planet gear (16 to 1, z15):5",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):9",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):10",
+          "16 to 1 planetary gearbox:1+605 zz (5x14x5):6",
+          "16 to 1 planetary gearbox:1+planet gear (16 to 1, z15):6",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):11",
+          "16 to 1 planetary gearbox:1+Washer (M5x18x1):12",
+          "16 to 1 planetary gearbox:1+(Purchased) JF-M5-25:4",
+          "16 to 1 planetary gearbox:1+(Purchased) JF-M5-25:5",
+          "16 to 1 planetary gearbox:1+(Purchased) JF-M5-25:6",
+          "16 to 1 planetary gearbox:1+6800 zz (10x19x5):2"
+        ],
+        "mesh_bake_offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_collision": "meshes/marav3best/base_link_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/base_link.dae",
+        "needs_mesh_bake": false,
+        "occurrence_path": "Base plate ver 2:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": "base_link",
+        "source_world_rotation": [
+          1.0,
+          2.0226645470726202e-47,
+          1.1842378929334864e-15,
+          1.1842378929334866e-15,
+          -2.220446049250313e-16,
+          -1.0000000000000002,
+          2.629536350736675e-31,
+          1.0000000000000002,
+          -2.220446049250313e-16
+        ],
+        "urdf_name": "base_link",
+        "volume_m3": 0.0018152266897223737,
+        "wants_accurate_collision": false
+      },
+      "marav3best_gripper": {
+        "area_m2": 0.010737119364091942,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.08,
+          0.038000000000000006,
+          0.0
+        ],
+        "bbox_min": [
+          -0.004,
+          0.00025561895441374106,
+          -0.032
+        ],
+        "bbox_size": [
+          0.084,
+          0.037744381045586264,
+          0.032
+        ],
+        "body_count": 1,
+        "clean_name": "gripper",
+        "collision": {
+          "mesh_path": "meshes/marav3best/marav3best_gripper.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.08,
+          0.038000000000000006,
+          0.0
+        ],
+        "collision_bbox_min": [
+          -0.004,
+          0.00025561895441374106,
+          -0.032
+        ],
+        "collision_bbox_size": [
+          0.084,
+          0.037744381045586264,
+          0.032
+        ],
+        "collision_body_count": 1,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 4.850152756476001e-05,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          0.04081299193502429,
+          0.02194558102215022,
+          -0.015999999999997735
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          0.09292498036160218,
+          0.004446445955575548,
+          0.6266328114384666
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 8.789806524422016e-06,
+          "ixy": -6.61546473901875e-06,
+          "ixz": 3.449118161219511e-18,
+          "iyy": 2.406468026708659e-05,
+          "iyz": 2.947674656444965e-19,
+          "izz": 2.4726848347126075e-05
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": false,
+        "mass_kg": 0.04850152756476001,
+        "material_name": "Generic",
+        "merged_member_paths": [],
+        "mesh_bake_offset": [
+          -0.006249999999999982,
+          -0.01899999999999997,
+          0.016000000000000243
+        ],
+        "mesh_collision": "meshes/marav3best/marav3best_gripper_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/marav3best_gripper.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "gripper:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": null,
+        "source_world_rotation": [
+          -1.8754110096561112e-12,
+          -0.9999999999999996,
+          5.693796161288199e-13,
+          -0.019963367074895735,
+          -5.315093637525637e-13,
+          -0.9998007121296973,
+          0.9998007121296935,
+          -1.886843197656666e-12,
+          -0.019963367074890725
+        ],
+        "urdf_name": "marav3best_gripper",
+        "volume_m3": 4.850152756476001e-05,
+        "wants_accurate_collision": false
+      },
+      "marav3best_gripper_2": {
+        "area_m2": 0.010737119364091942,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.08,
+          0.038000000000000006,
+          0.0
+        ],
+        "bbox_min": [
+          -0.004,
+          0.00025561895441374106,
+          -0.032
+        ],
+        "bbox_size": [
+          0.084,
+          0.037744381045586264,
+          0.032
+        ],
+        "body_count": 1,
+        "clean_name": "gripper",
+        "collision": {
+          "mesh_path": "meshes/marav3best/marav3best_gripper_2.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.08,
+          0.038000000000000006,
+          0.0
+        ],
+        "collision_bbox_min": [
+          -0.004,
+          0.00025561895441374106,
+          -0.032
+        ],
+        "collision_bbox_size": [
+          0.084,
+          0.037744381045586264,
+          0.032
+        ],
+        "collision_body_count": 1,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 4.850152756476001e-05,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          0.04081299193502429,
+          0.02194558102215022,
+          -0.015999999999997735
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          -0.0490687694856364,
+          0.03683998902850308,
+          0.6272796245314249
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 8.789806524422016e-06,
+          "ixy": -6.61546473901875e-06,
+          "ixz": 3.449118161219511e-18,
+          "iyy": 2.406468026708659e-05,
+          "iyz": 2.947674656444965e-19,
+          "izz": 2.4726848347126075e-05
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": false,
+        "mass_kg": 0.04850152756476001,
+        "material_name": "Generic",
+        "merged_member_paths": [],
+        "mesh_bake_offset": [
+          -0.006250000000000069,
+          -0.019000000000000013,
+          0.016000000000000444
+        ],
+        "mesh_collision": "meshes/marav3best/marav3best_gripper_2_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/marav3best_gripper_2.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "gripper:2",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": null,
+        "source_world_rotation": [
+          -1.873236017136553e-12,
+          1.0,
+          -5.692084482095905e-13,
+          -0.01996336707489566,
+          5.317656788100659e-13,
+          0.9998007121297027,
+          0.9998007121296963,
+          1.8847456343895306e-12,
+          0.019963367074893306
+        ],
+        "urdf_name": "marav3best_gripper_2",
+        "volume_m3": 4.850152756476001e-05,
+        "wants_accurate_collision": false
+      },
+      "marav3best_gripper_2nd_link": {
+        "area_m2": 0.001350534388228623,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.018500000000000003,
+          0.005500000000000016,
+          0.0037
+        ],
+        "bbox_min": [
+          -0.018500000000000003,
+          -0.005499999999999985,
+          -0.0045000000000000005
+        ],
+        "bbox_size": [
+          0.037000000000000005,
+          0.011000000000000001,
+          0.0082
+        ],
+        "body_count": 1,
+        "clean_name": "gripper_2nd_link",
+        "collision": {
+          "mesh_path": "meshes/marav3best/marav3best_gripper_2nd_link.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.018500000000000003,
+          0.005500000000000016,
+          0.0037
+        ],
+        "collision_bbox_min": [
+          -0.018500000000000003,
+          -0.005499999999999985,
+          -0.0045000000000000005
+        ],
+        "collision_bbox_size": [
+          0.037000000000000005,
+          0.011000000000000001,
+          0.0082
+        ],
+        "collision_body_count": 1,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 9.539503338420103e-07,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          -0.0016732074793846209,
+          1.5129612945360488e-17,
+          0.00016466348301819034
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          0.06092627497724396,
+          0.02043703086378834,
+          0.6364539945976886
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 1.1332168791225468e-08,
+          "ixy": 8.687306737087388e-23,
+          "ixz": -5.051299244157639e-09,
+          "iyy": 1.1150308401885223e-07,
+          "iyz": 5.1521290336658805e-24,
+          "izz": 1.1663675204754986e-07
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": false,
+        "mass_kg": 0.0009539503338420102,
+        "material_name": "Generic",
+        "merged_member_paths": [],
+        "mesh_bake_offset": [
+          -0.01300000000000022,
+          -8.174969083835429e-17,
+          -0.00030000000000003396
+        ],
+        "mesh_collision": "meshes/marav3best/marav3best_gripper_2nd_link_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/marav3best_gripper_2nd_link.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "gripper 2nd link:1",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": null,
+        "source_world_rotation": [
+          -0.9999004141874063,
+          -0.014112466399241404,
+          9.31270295254083e-12,
+          0.01410965395567561,
+          -0.9997011461632189,
+          -0.019963367081269997,
+          0.00028173235646126657,
+          -0.019961379013002708,
+          0.9998007121295714
+        ],
+        "urdf_name": "marav3best_gripper_2nd_link",
+        "volume_m3": 9.539503338420103e-07,
+        "wants_accurate_collision": false
+      },
+      "marav3best_gripper_2nd_link_2": {
+        "area_m2": 0.001350534388228623,
+        "assembly": "marav3best",
+        "bbox_max": [
+          0.018500000000000003,
+          0.005500000000000016,
+          0.0037
+        ],
+        "bbox_min": [
+          -0.018500000000000003,
+          -0.005499999999999985,
+          -0.0045000000000000005
+        ],
+        "bbox_size": [
+          0.037000000000000005,
+          0.011000000000000001,
+          0.0082
+        ],
+        "body_count": 1,
+        "clean_name": "gripper_2nd_link",
+        "collision": {
+          "mesh_path": "meshes/marav3best/marav3best_gripper_2nd_link_2.dae",
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "origin_xyz": null,
+          "primitive": null,
+          "source": "visual_reuse"
+        },
+        "collision_bbox_max": [
+          0.018500000000000003,
+          0.005500000000000016,
+          0.0037
+        ],
+        "collision_bbox_min": [
+          -0.018500000000000003,
+          -0.005499999999999985,
+          -0.0045000000000000005
+        ],
+        "collision_bbox_size": [
+          0.037000000000000005,
+          0.011000000000000001,
+          0.0082
+        ],
+        "collision_body_count": 1,
+        "collision_body_names": [],
+        "collision_excluded_body_names": [],
+        "collision_override": "",
+        "collision_volume_m3": 9.539503338420103e-07,
+        "color_rgb": [
+          0.3137254901960784,
+          0.3137254901960784,
+          0.3137254901960784
+        ],
+        "com_link_local": [
+          -0.0016732074793846209,
+          1.5129612945360488e-17,
+          0.00016466348301819034
+        ],
+        "frame_rebase_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "frame_rule": "keep",
+        "global_position": [
+          -0.017070064101202948,
+          0.020470100145816423,
+          0.6364546549043213
+        ],
+        "has_collision_exclusions": false,
+        "has_explicit_collision": false,
+        "has_visual_mesh": true,
+        "inertia_at_com": {
+          "ixx": 1.1332168791225468e-08,
+          "ixy": 8.687306737087388e-23,
+          "ixz": -5.051299244157639e-09,
+          "iyy": 1.1150308401885223e-07,
+          "iyz": 5.1521290336658805e-24,
+          "izz": 1.1663675204754986e-07
+        },
+        "inertial_origin_xyz": null,
+        "is_empty": false,
+        "is_frame_only": false,
+        "is_merged": false,
+        "mass_kg": 0.0009539503338420102,
+        "material_name": "Generic",
+        "merged_member_paths": [],
+        "mesh_bake_offset": [
+          -0.013000000000000005,
+          1.5663333260626522e-17,
+          -0.00029999999999997867
+        ],
+        "mesh_collision": "meshes/marav3best/marav3best_gripper_2nd_link_2_collision.stl",
+        "mesh_collision_input": "",
+        "mesh_origin_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mesh_visual": "meshes/marav3best/marav3best_gripper_2nd_link_2.dae",
+        "needs_mesh_bake": true,
+        "occurrence_path": "gripper 2nd link:2",
+        "rigid_group_collision_offset": null,
+        "rigid_group_collision_path": null,
+        "rigid_group_name": null,
+        "source_world_rotation": [
+          0.9999004141874227,
+          0.014112466397519233,
+          1.0838564204126988e-11,
+          -0.014109653953931675,
+          0.9997011461633651,
+          -0.01996336707494668,
+          -0.00028173235786193955,
+          0.019961379006659365,
+          0.9998007121296919
+        ],
+        "urdf_name": "marav3best_gripper_2nd_link_2",
+        "volume_m3": 9.539503338420103e-07,
+        "wants_accurate_collision": false
+      }
+    },
+    "name": "marav3best",
+    "root_link": "base_link",
+    "warnings": []
+  }
+}

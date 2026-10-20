@@ -1,0 +1,13 @@
+link,parent_joint,joint_type,rule,original_roll_deg,original_pitch_deg,original_yaw_deg,post_roll_deg,post_pitch_deg,post_yaw_deg,role
+RG_elbow_arm,J4_pitch_elbow,continuous,auto,90.000000,-0.588072,90.000000,90.000000,0.000000,90.000000,revolute_axis_z
+RG_elbow_link,J3_rigid_shoulderArm_elbowLink,fixed,keep,90.000000,-0.765449,90.000000,90.000000,-0.765449,90.000000,unchanged
+RG_gripper_horn,J9_horn_drive,continuous,auto,179.158642,0.775017,-137.353189,-178.856107,0.000000,0.000000,revolute_axis_z
+RG_shoulder_arm,J2_pitch_shoulder,continuous,auto,90.000000,0.765449,-90.000000,-90.000000,0.000000,90.000000,revolute_axis_z
+RG_shoulder_link,J1_yaw_base_shoulderLink,continuous,auto,90.000000,0.000000,-90.000000,180.000000,0.000000,0.000000,revolute_axis_z
+RG_wrist_arm,J6_pitch_wrist,continuous,auto,90.000000,1.143893,-90.000000,-90.000000,0.000000,90.000000,revolute_axis_z
+RG_wrist_link,J5_rigid_elbowArm_wristLink,fixed,keep,90.000000,0.588072,-90.000000,90.000000,0.588072,-90.000000,unchanged
+base_link,,root,auto,90.000000,0.000000,0.000000,0.000000,0.000000,0.000000,root_x_forward_z_up
+marav3best_gripper,J12_link1_tooth1,continuous,auto,-180.000000,-88.856107,-90.000000,1.143893,0.000000,0.000000,revolute_axis_z
+marav3best_gripper_2,J13_link2_tooth2,continuous,auto,0.000000,-88.856107,-90.000000,1.143893,0.000000,0.000000,revolute_axis_z
+marav3best_gripper_2nd_link,J10_horn_link1,continuous,auto,-1.143779,-0.016142,179.191550,1.143893,0.000000,0.000000,revolute_axis_z
+marav3best_gripper_2nd_link_2,J11_horn_link2,continuous,auto,1.143779,0.016142,-0.808450,1.143893,0.000000,0.000000,revolute_axis_z

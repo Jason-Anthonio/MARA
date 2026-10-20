@@ -1,0 +1,19 @@
+# Joint configuration for joint_state_publisher_gui
+
+joint_state_publisher:
+  ros__parameters:
+    # Joint names and default positions
+    zeros:
+      J1_yaw_base_shoulderLink: 0.0
+      J2_pitch_shoulder: 0.0
+      J4_pitch_elbow: 0.0
+      J6_pitch_wrist: 0.0
+      J9_horn_drive: 0.0
+
+    # Joints to publish
+    source_list:
+      - J1_yaw_base_shoulderLink
+      - J2_pitch_shoulder
+      - J4_pitch_elbow
+      - J6_pitch_wrist
+      - J9_horn_drive
