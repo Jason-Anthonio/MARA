@@ -11,6 +11,20 @@ bash build.sh
 source install/setup.bash
 ros2 launch marav2ckptbest_description display.launch.py
 
+# Gazebo simulation (arm + stereo cameras)
+Runs the arm in Gazebo Harmonic with gz_ros2_control and both wrist cameras.
+On start, the arm moves to a "scan" pose that looks at three test objects.
+```
+cd ws_MARA
+colcon build --packages-select marav3best_description mara_gazebo
+source install/setup.bash
+ros2 launch mara_gazebo sim.launch.py              # Gazebo GUI + RViz with both camera feeds
+ros2 launch mara_gazebo sim.launch.py gui:=false   # headless Gazebo
+```
+The same trajectory commands as below work in the sim.
+The camera images are published on /camera_top/image_raw and /camera_bottom/image_raw (plus camera_info).
+On a hybrid-graphics laptop, Gazebo must render on the NVIDIA GPU (check `prime-select query`).
+
 # check the controllers:
 ros2 control list_controllers
 ## make sure they're all active

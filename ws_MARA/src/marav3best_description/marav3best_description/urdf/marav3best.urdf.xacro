@@ -8,8 +8,29 @@
 
   <!-- Assembly includes -->
   <xacro:include filename="$(find marav3best_description)/urdf/assemblies/marav3best.urdf.xacro"/>
+  <xacro:include filename="$(find marav3best_description)/urdf/stereo_camera.urdf.xacro"/>
+
+  <!-- use_sim:=true swaps mock hardware for Gazebo (gz_ros2_control) -->
+  <xacro:arg name="use_sim" default="false"/>
+  <xacro:property name="use_sim" value="$(arg use_sim)"/>
 
   <!-- Instantiate assemblies -->
-  <xacro:marav3best prefix=""/>
+  <xacro:marav3best prefix="" use_sim="${use_sim}"/>
+  <xacro:stereo_pair prefix=""/>
+
+  <xacro:if value="${use_sim}">
+    <link name="world"/>
+    <joint name="world_to_base" type="fixed">
+      <parent link="world"/>
+      <child link="base_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <gazebo>
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>$(find marav3best_description)/config/ros2_controllers.yaml</parameters>
+      </plugin>
+    </gazebo>
+  </xacro:if>
 
 </robot>

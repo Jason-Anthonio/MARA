@@ -1,0 +1,67 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Value: true
+      Cell Size: 0.1
+      Color: 160; 160; 164
+      Plane: XY
+      Plane Cell Count: 20
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Value: true
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description
+      Visual Enabled: true
+      Collision Enabled: false
+      Alpha: 1.0
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Value: true
+      Show Arrows: false
+      Show Axes: true
+      Show Names: false
+      Marker Scale: 0.3
+      Frames:
+        All Enabled: false
+        camera_top_optical_frame:
+          Value: true
+        camera_bottom_optical_frame:
+          Value: true
+    - Class: rviz_default_plugins/Image
+      Name: camera_top
+      Value: true
+      Topic:
+        Value: /camera_top/image_upright
+        Reliability Policy: Best Effort
+    - Class: rviz_default_plugins/Image
+      Name: camera_bottom
+      Value: true
+      Topic:
+        Value: /camera_bottom/image_upright
+        Reliability Policy: Best Effort
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: base_link
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/FocusCamera
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 1.4
+      Focal Point:
+        X: 0
+        Y: -0.15
+        Z: 0.25
+      Pitch: 0.5
+      Yaw: -1.2
+      Name: Current View

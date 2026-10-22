@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="marav3best_macro">
 
-  <xacro:macro name="marav3best" params="prefix">
+  <xacro:macro name="marav3best" params="prefix use_sim:=false">
 
     <!-- Links -->
     <link name="${prefix}base_link">
@@ -357,13 +357,18 @@
       <mimic joint="${prefix}J9_horn_drive" multiplier="-1.0" offset="0.0"/>
     </joint>
 
-    <!-- ROS 2 control: generated generic system -->
+    <!-- ROS 2 control: mock hardware for RViz, gz_ros2_control for Gazebo -->
     <ros2_control name="${prefix}marav3best_system" type="system">
       <hardware>
-        <plugin>mock_components/GenericSystem</plugin>
-        <param name="cmd_topic">sim/marav3best_system/cmd</param>
-        <param name="state_topic">sim/marav3best_system/state</param>
-        <param name="calculate_dynamics">true</param>
+        <xacro:if value="${use_sim}">
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </xacro:if>
+        <xacro:unless value="${use_sim}">
+          <plugin>mock_components/GenericSystem</plugin>
+          <param name="cmd_topic">sim/marav3best_system/cmd</param>
+          <param name="state_topic">sim/marav3best_system/state</param>
+          <param name="calculate_dynamics">true</param>
+        </xacro:unless>
       </hardware>
 
       <joint name="${prefix}J1_yaw_base_shoulderLink">
@@ -411,6 +416,22 @@
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
       </joint>
+
+      <!-- Gripper linkage follows J9 through the URDF <mimic> tags; Gazebo
+           only drives mimic joints that are listed here -->
+      <xacro:if value="${use_sim}">
+        <xacro:macro name="mimic_state" params="name">
+          <joint name="${prefix}${name}">
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <state_interface name="effort"/>
+          </joint>
+        </xacro:macro>
+        <xacro:mimic_state name="J10_horn_link1"/>
+        <xacro:mimic_state name="J11_horn_link2"/>
+        <xacro:mimic_state name="J12_link1_tooth1"/>
+        <xacro:mimic_state name="J13_link2_tooth2"/>
+      </xacro:if>
     </ros2_control>
 
   </xacro:macro>

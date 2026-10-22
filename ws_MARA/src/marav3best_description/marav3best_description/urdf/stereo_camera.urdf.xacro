@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Distance from block face to the point both optical axes cross (m) -->
+  <xacro:property name="stereo_converge_dist" value="0.350"/>
+  <!-- Half the baseline: block face centre offset from the gripper axis (m) -->
+  <xacro:property name="stereo_half_baseline" value="0.03459"/>
+  <!-- Camera body depth; the sensor sits on the front of the body (m) -->
+  <xacro:property name="stereo_cam_depth" value="0.008"/>
+  <!-- Toe-in angle of each camera toward the gripper axis (rad) -->
+  <xacro:property name="stereo_toe_in"
+                  value="${atan2(stereo_half_baseline, stereo_converge_dist - stereo_cam_depth)}"/>
+
+  <xacro:macro name="stereo_camera" params="prefix name side">
+    <!-- side: +1 for camera_top (+y), -1 for camera_bottom (-y) -->
+
+    <link name="${prefix}${name}_link">
+      <visual>
+        <origin xyz="${-stereo_cam_depth/2} 0 0" rpy="0 0 0"/>
+        <geometry><box size="${stereo_cam_depth} 0.020 0.020"/></geometry>
+        <material name="CameraGrey"/>
+      </visual>
+      <visual>
+        <origin xyz="0.001 0 0" rpy="0 ${pi/2} 0"/>
+        <geometry><cylinder radius="0.005" length="0.002"/></geometry>
+        <material name="Lens"/>
+      </visual>
+      <collision>
+        <origin xyz="${-stereo_cam_depth/2} 0 0" rpy="0 0 0"/>
+        <geometry><box size="${stereo_cam_depth} 0.020 0.020"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="0.010"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+      </inertial>
+    </link>
+
+    <!-- Body front face sits stereo_cam_depth in front of the block face, toed in -->
+    <joint name="${prefix}${name}_joint" type="fixed">
+      <parent link="${prefix}stereo_mount_link"/>
+      <child link="${prefix}${name}_link"/>
+      <origin xyz="${stereo_cam_depth} ${side*stereo_half_baseline} 0"
+              rpy="0 0 ${-side*stereo_toe_in}"/>
+    </joint>
+
+    <!-- ROS optical frame: z forward, x right, y down -->
+    <link name="${prefix}${name}_optical_frame"/>
+    <joint name="${prefix}${name}_optical_joint" type="fixed">
+      <parent link="${prefix}${name}_link"/>
+      <child link="${prefix}${name}_optical_frame"/>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    </joint>
+
+    <!-- Gazebo Harmonic camera sensor (ignored by RViz) -->
+    <gazebo reference="${prefix}${name}_link">
+      <sensor name="${prefix}${name}" type="camera">
+        <always_on>true</always_on>
+        <update_rate>15</update_rate>
+        <visualize>true</visualize>
+        <topic>${prefix}${name}/image_raw</topic>
+        <gz_frame_id>${prefix}${name}_optical_frame</gz_frame_id>
+        <camera>
+          <camera_info_topic>${prefix}${name}/camera_info</camera_info_topic>
+          <horizontal_fov>1.047</horizontal_fov>
+          <image><width>640</width><height>360</height><format>R8G8B8</format></image>
+          <clip><near>0.02</near><far>5.0</far></clip>
+        </camera>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="stereo_pair" params="prefix">
+    <material name="CameraGrey"><color rgba="0.6 0.6 0.6 1.0"/></material>
+    <material name="Lens"><color rgba="0.1 0.3 0.8 1.0"/></material>
+
+    <link name="${prefix}stereo_mount_link"/>
+    <joint name="${prefix}stereo_mount_joint" type="fixed">
+      <parent link="${prefix}RG_wrist_arm"/>
+      <child link="${prefix}stereo_mount_link"/>
+      <origin xyz="-0.002243 -0.112297 -0.082000" rpy="-3.141592 0.000000 -1.590761"/>
+    </joint>
+
+    <xacro:stereo_camera prefix="${prefix}" name="camera_top" side="1"/>
+    <xacro:stereo_camera prefix="${prefix}" name="camera_bottom" side="-1"/>
+  </xacro:macro>
+</robot>
